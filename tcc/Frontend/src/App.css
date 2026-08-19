@@ -1,78 +1,1156 @@
+/* =========================
+   RESET
+========================= */
+
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f5f5f5;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f7f9f7;
+  color: #333;
 }
 
-#root {
-  min-height: 100vh;
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
 }
 
-.app {
-  width: 90%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 30px 0;
-}
 
-.titulo {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.subtitulo {
-  text-align: center;
-  color: #666;
-  margin-bottom: 30px;
-}
-
-.lista-animais {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
-}
+/* =========================
+   NAVBAR
+========================= */
 
 .navbar {
   width: 100%;
-  padding: 15px 5%;
-  background-color: white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  min-height: 70px;
+  padding: 0 50px;
 
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 
-  margin-bottom: 30px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e5e5;
+
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .logo {
   text-decoration: none;
-  color: #222;
-  font-size: 22px;
+  color: #2e7d32;
+
+  font-size: 25px;
   font-weight: bold;
 }
 
 .navbar-direita {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 25px;
 }
 
 .navbar-direita a {
   text-decoration: none;
+  color: #444;
+  font-weight: 600;
+
+  transition: 0.2s;
+}
+
+.navbar-direita a:hover {
+  color: #2e7d32;
+}
+
+.navbar-direita span {
+  color: #555;
+}
+
+.navbar button {
+  border: none;
+  border-radius: 8px;
+
+  padding: 10px 18px;
+
+  background: #e53935;
+  color: white;
+
+  cursor: pointer;
+  font-weight: bold;
+
+  transition: 0.2s;
+}
+
+.navbar button:hover {
+  background: #c62828;
+}
+
+
+/* =========================
+   CONTAINER PRINCIPAL
+========================= */
+
+.app {
+  width: 90%;
+  max-width: 1200px;
+
+  margin: 0 auto;
+  padding: 45px 0;
+}
+
+.titulo {
+  text-align: center;
+
+  color: #2e7d32;
+
+  font-size: 38px;
+  margin-bottom: 8px;
+}
+
+.subtitulo {
+  text-align: center;
+
+  color: #777;
+
+  font-size: 17px;
+
+  margin-bottom: 45px;
+}
+
+.app h2 {
+  margin-bottom: 25px;
+
   color: #333;
 }
 
-.navbar-direita button {
+
+/* =========================
+   LISTA DE ANIMAIS
+========================= */
+
+.lista-animais {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(280px, 1fr));
+
+  gap: 25px;
+}
+
+
+/* =========================
+   CARD DO ANIMAL
+========================= */
+
+.animal-card {
+  background: #ffffff;
+
+  border-radius: 15px;
+
+  overflow: hidden;
+
+  border: 1px solid #e6e6e6;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.08);
+
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.animal-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================
+   FOTO DO ANIMAL
+========================= */
+
+.animal-foto {
+  width: 100%;
+  height: 220px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf5ea;
+
+  overflow: hidden;
+}
+
+.animal-foto img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.animal-foto span {
+  font-size: 75px;
+}
+
+
+/* =========================
+   INFORMAÇÕES DO ANIMAL
+========================= */
+
+.animal-info {
+  padding: 22px;
+}
+
+.animal-info h3 {
+  color: #2e7d32;
+
+  font-size: 24px;
+
+  margin-bottom: 15px;
+}
+
+.animal-info p {
+  margin-bottom: 9px;
+
+  color: #555;
+
+  line-height: 1.5;
+}
+
+.animal-info strong {
+  color: #333;
+}
+
+.animal-info .descricao {
+  margin-top: 15px;
+
+  padding-top: 15px;
+
+  border-top: 1px solid #eeeeee;
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+button {
   border: none;
-  border-radius: 6px;
-  padding: 8px 15px;
-  cursor: pointer;
-  background-color: #e53935;
+
+  border-radius: 8px;
+
+  padding: 12px 20px;
+
+  background: #2e7d32;
+
   color: white;
-  font-size: 14px;
+
+  font-size: 15px;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #256b29;
+}
+
+button:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+
+/* =========================
+   LOGIN E CADASTRO
+========================= */
+
+.auth-container {
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 30px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #eaf7ea,
+      #ffffff
+    );
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 430px;
+
+  background: #ffffff;
+
+  padding: 40px;
+
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.1);
+}
+
+.auth-card h1 {
+  text-align: center;
+
+  color: #2e7d32;
+
+  margin-bottom: 10px;
+}
+
+.auth-card h2 {
+  text-align: center;
+
+  margin-bottom: 30px;
+}
+
+.auth-card form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+.auth-card label {
+  display: block;
+
+  margin-bottom: 7px;
+
+  font-weight: bold;
+}
+
+.auth-card input {
+  width: 100%;
+
+  padding: 13px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 8px;
+
+  outline: none;
+
+  font-size: 15px;
+
+  transition: 0.2s;
+}
+
+.auth-card input:focus {
+  border-color: #2e7d32;
+
+  box-shadow:
+    0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+.auth-card button {
+  width: 100%;
+
+  margin-top: 8px;
+}
+
+.auth-link {
+  text-align: center;
+
+  margin-top: 20px;
+}
+
+.auth-link a {
+  color: #2e7d32;
+
+  font-weight: bold;
+
+  text-decoration: none;
+}
+
+
+/* =========================
+   MENSAGENS
+========================= */
+
+.mensagem-sucesso {
+  padding: 12px;
+
+  border-radius: 8px;
+
+  background: #e8f5e9;
+
+  color: #2e7d32;
+
+  text-align: center;
+
+  font-weight: bold;
+}
+
+.mensagem-erro {
+  padding: 12px;
+
+  border-radius: 8px;
+
+  background: #ffebee;
+
+  color: #c62828;
+
+  text-align: center;
+
+  font-weight: bold;
+}
+
+
+/* =========================
+   PAINEL ADMIN
+========================= */
+
+.admin {
+  width: 90%;
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  padding: 45px 0;
+}
+
+.admin h1 {
+  color: #2e7d32;
+
+  font-size: 32px;
+
+  margin-bottom: 10px;
+}
+
+.admin > p {
+  color: #777;
+
+  margin-bottom: 25px;
+}
+
+
+/* =========================
+   CARDS DO PAINEL
+========================= */
+
+.admin-cards {
+  display: grid;
+
+  grid-template-columns:
+    repeat(auto-fit, minmax(240px, 1fr));
+
+  gap: 25px;
+
+  margin-top: 35px;
+}
+
+.admin-card {
+  background: white;
+
+  padding: 30px;
+
+  border-radius: 15px;
+
+  border: 1px solid #e5e5e5;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.07);
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.admin-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.admin-card h2 {
+  color: #2e7d32;
+
+  margin-bottom: 10px;
+}
+
+.admin-card p {
+  color: #666;
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+   ADMIN - ANIMAIS
+========================= */
+
+.lista-admin-animais {
+  display: grid;
+
+  gap: 18px;
+
+  margin-top: 30px;
+}
+
+.animal-admin-card {
+  background: white;
+
+  padding: 25px;
+
+  border-radius: 14px;
+
+  border: 1px solid #e5e5e5;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 20px;
+
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.animal-admin-info h2 {
+  color: #2e7d32;
+
+  margin-bottom: 12px;
+}
+
+.animal-admin-info p {
+  margin-bottom: 6px;
+
+  color: #555;
+}
+
+.animal-admin-acoes {
+  display: flex;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+.animal-admin-acoes button:first-child {
+  background: #1976d2;
+}
+
+.animal-admin-acoes button:first-child:hover {
+  background: #125ca3;
+}
+
+.animal-admin-acoes button:last-child {
+  background: #e53935;
+}
+
+.animal-admin-acoes button:last-child:hover {
+  background: #c62828;
+}
+
+
+/* =========================
+   FORMULÁRIO DE ANIMAL
+========================= */
+
+.admin-form {
+  width: 90%;
+  max-width: 700px;
+
+  margin: 0 auto;
+
+  padding: 45px 0;
+}
+
+.admin-form h1 {
+  color: #2e7d32;
+
+  margin-bottom: 10px;
+}
+
+.admin-form > p {
+  color: #777;
+
+  margin-bottom: 30px;
+}
+
+.form-animal {
+  background: white;
+
+  padding: 35px;
+
+  border-radius: 16px;
+
+  border: 1px solid #e5e5e5;
+
+  box-shadow:
+    0 5px 25px rgba(0, 0, 0, 0.08);
+}
+
+.campo {
+  margin-bottom: 20px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  background: white;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  border-color: #2e7d32;
+  box-shadow:
+    0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+.campo textarea {
+  resize: vertical;
+}
+
+.form-acoes {
+  display: flex;
+
+  justify-content: flex-end;
+
+  gap: 12px;
+
+  margin-top: 25px;
+}
+
+.form-acoes button:first-child {
+  background: #777;
+}
+
+.form-acoes button:first-child:hover {
+  background: #555;
+}
+
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 700px) {
+
+  .navbar {
+    padding: 15px 20px;
+
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .navbar-direita {
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 12px;
+  }
+
+  .app,
+  .admin,
+  .admin-form {
+    width: 92%;
+  }
+
+  .titulo {
+    font-size: 30px;
+  }
+
+  .animal-admin-card {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .animal-admin-acoes {
+    width: 100%;
+  }
+
+  .animal-admin-acoes button {
+    flex: 1;
+  }
+
+  .form-animal {
+    padding: 25px 20px;
+  }
+
+  .form-acoes {
+    flex-direction: column;
+  }
+
+  .form-acoes button {
+    width: 100%;
+  }
+}
+
+/* =========================
+   SOLICITAÇÕES
+========================= */
+
+.solicitacoes-page {
+  width: 90%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 45px 0;
+}
+
+.solicitacoes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 25px;
+  margin-bottom: 35px;
+}
+
+.solicitacoes-header h1 {
+  color: #2e7d32;
+  font-size: 32px;
+  margin-bottom: 8px;
+}
+
+.solicitacoes-header p {
+  color: #777;
+}
+
+.solicitacoes-header button {
+  white-space: nowrap;
+}
+
+
+/* LISTA */
+
+.solicitacoes-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+
+/* CARD */
+
+.solicitacao-card {
+  background: white;
+  border-radius: 16px;
+  padding: 25px;
+
+  border: 1px solid #e5e5e5;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.07);
+
+  transition: 0.2s;
+}
+
+.solicitacao-card:hover {
+  transform: translateY(-3px);
+
+  box-shadow:
+    0 9px 25px rgba(0, 0, 0, 0.1);
+}
+
+
+/* PET */
+
+.solicitacao-pet {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.solicitacao-pet-foto {
+  width: 85px;
+  height: 85px;
+
+  border-radius: 50%;
+
+  overflow: hidden;
+
+  background: #eaf5ea;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.solicitacao-pet-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.solicitacao-pet-foto span {
+  font-size: 35px;
+}
+
+.solicitacao-label {
+  display: block;
+
+  color: #888;
+
+  font-size: 13px;
+
+  margin-bottom: 3px;
+}
+
+.solicitacao-pet h2 {
+  color: #2e7d32;
+
+  margin-bottom: 5px;
+}
+
+.solicitacao-pet p {
+  color: #666;
+}
+
+
+/* DETALHES */
+
+.solicitacao-detalhes {
+  display: flex;
+
+  gap: 60px;
+
+  padding: 20px 0;
+}
+
+.solicitacao-detalhes div {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.solicitacao-detalhes span {
+  color: #888;
+  font-size: 13px;
+}
+
+.solicitacao-detalhes strong {
+  font-size: 15px;
+}
+
+
+/* STATUS */
+
+.status-aprovada {
+  color: #2e7d32;
+}
+
+.status-recusada {
+  color: #d32f2f;
+}
+
+.status-pendente {
+  color: #f57c00;
+}
+
+
+/* MENSAGEM */
+
+.solicitacao-mensagem {
+  background: #f7f9f7;
+
+  border-radius: 10px;
+
+  padding: 15px;
+}
+
+.solicitacao-mensagem span {
+  display: block;
+
+  color: #777;
+
+  font-size: 13px;
+
+  margin-bottom: 6px;
+}
+
+.solicitacao-mensagem p {
+  color: #555;
+
+  line-height: 1.5;
+
+  font-style: italic;
+}
+
+
+/* VAZIO */
+
+.solicitacoes-vazia {
+  background: white;
+
+  border-radius: 16px;
+
+  padding: 60px 25px;
+
+  text-align: center;
+
+  border: 1px solid #e5e5e5;
+
+  box-shadow:
+    0 5px 20px rgba(0, 0, 0, 0.06);
+}
+
+.solicitacoes-vazia span {
+  display: block;
+
+  font-size: 60px;
+
+  margin-bottom: 15px;
+}
+
+.solicitacoes-vazia h2 {
+  color: #333;
+
+  margin-bottom: 10px;
+}
+
+.solicitacoes-vazia p {
+  color: #777;
+
+  margin-bottom: 25px;
+}
+
+
+/* RESPONSIVO */
+
+@media (max-width: 700px) {
+
+  .solicitacoes-header {
+    flex-direction: column;
+
+    align-items: flex-start;
+  }
+
+  .solicitacao-detalhes {
+    flex-direction: column;
+
+    gap: 15px;
+  }
+
+  .solicitacao-pet {
+    align-items: flex-start;
+  }
+
+}
+
+/* =========================
+   SOLICITAR ADOÇÃO
+========================= */
+
+.solicitar-page {
+  min-height: calc(100vh - 70px);
+
+  display: flex;
+  justify-content: center;
+
+  padding: 50px 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f1f8f1,
+      #ffffff
+    );
+}
+
+.solicitar-card {
+  width: 100%;
+  max-width: 650px;
+
+  background: white;
+
+  padding: 40px;
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 10px 35px rgba(0, 0, 0, 0.09);
+
+  border: 1px solid #e5e5e5;
+
+  align-self: flex-start;
+}
+
+.solicitar-icon {
+  width: 75px;
+  height: 75px;
+
+  margin: 0 auto 15px;
+
+  border-radius: 50%;
+
+  background: #eaf5ea;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 38px;
+}
+
+.solicitar-card h1 {
+  text-align: center;
+
+  color: #2e7d32;
+
+  font-size: 32px;
+
+  margin-bottom: 8px;
+}
+
+.solicitar-subtitulo {
+  text-align: center;
+
+  color: #777;
+
+  line-height: 1.5;
+
+  margin-bottom: 25px;
+}
+
+.usuario-solicitacao {
+  background: #f7f9f7;
+
+  padding: 15px;
+
+  border-radius: 10px;
+
+  margin-bottom: 25px;
+}
+
+.usuario-solicitacao span {
+  display: block;
+
+  color: #888;
+
+  font-size: 13px;
+
+  margin-bottom: 5px;
+}
+
+.usuario-solicitacao strong {
+  color: #333;
+}
+
+.solicitar-card form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+}
+
+.solicitar-card label {
+  font-weight: bold;
+
+  color: #333;
+
+  margin-bottom: 5px;
+}
+
+.solicitar-card textarea {
+  width: 100%;
+
+  padding: 15px;
+
+  border: 1px solid #ccc;
+
+  border-radius: 10px;
+
+  resize: vertical;
+
+  outline: none;
+
+  font-size: 15px;
+
+  line-height: 1.5;
+}
+
+.solicitar-card textarea:focus {
+  border-color: #2e7d32;
+
+  box-shadow:
+    0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+.dica-solicitacao {
+  color: #888;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  margin-bottom: 10px;
+}
+
+.solicitar-acoes {
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-top: 15px;
+}
+
+.botao-voltar {
+  background: #777;
+}
+
+.botao-voltar:hover {
+  background: #555;
+}
+
+@media (max-width: 600px) {
+
+  .solicitar-card {
+    padding: 28px 20px;
+  }
+
+  .solicitar-acoes {
+    flex-direction: column-reverse;
+  }
+
+  .solicitar-acoes button {
+    width: 100%;
+  }
+
 }

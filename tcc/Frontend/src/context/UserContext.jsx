@@ -4,43 +4,48 @@ export const UserContext = createContext();
 
 export function UserProvider({ children }) {
 
-  const [usuario, setUsuario] = useState(() => {
+    const [usuario, setUsuario] = useState(() => {
 
-    const usuarioSalvo = localStorage.getItem("usuario");
+        const usuarioSalvo = localStorage.getItem("usuario");
 
-    if (usuarioSalvo) {
-      return JSON.parse(usuarioSalvo);
+        if (!usuarioSalvo) {
+            return null;
+        }
+
+        try {
+            return JSON.parse(usuarioSalvo);
+        } catch {
+            localStorage.removeItem("usuario");
+            return null;
+        }
+    });
+
+    function login(usuarioDados) {
+
+        setUsuario(usuarioDados);
+
+        localStorage.setItem(
+            "usuario",
+            JSON.stringify(usuarioDados)
+        );
     }
 
-    return null;
-  });
+    function logout() {
 
-  function login(usuarioDados) {
+        setUsuario(null);
 
-    setUsuario(usuarioDados);
+        localStorage.removeItem("usuario");
+    }
 
-    localStorage.setItem(
-      "usuario",
-      JSON.stringify(usuarioDados)
+    return (
+        <UserContext.Provider
+            value={{
+                usuario,
+                login,
+                logout
+            }}
+        >
+            {children}
+        </UserContext.Provider>
     );
-  }
-
-  function logout() {
-
-    setUsuario(null);
-
-    localStorage.removeItem("usuario");
-  }
-
-  return (
-    <UserContext.Provider
-      value={{
-        usuario,
-        login,
-        logout
-      }}
-    >
-      {children}
-    </UserContext.Provider>
-  );
 }

@@ -7,36 +7,11 @@ import {
     removerSolicitacao
 } from "../controllers/solicitacaoController.js";
 
-import {
-    autenticar,
-    somenteAdmin
-} from "../middleware/auth.js";
-
 const router = express.Router();
 
-router.post(
-    "/",
-    autenticar,
-    criarSolicitacao
-);
-
-router.get(
-    "/",
-    autenticar,
-    listarSolicitacoes
-);
-
-router.put(
-    "/:id",
-    autenticar,
-    somenteAdmin,
-    atualizarSolicitacao
-);
-
-router.delete(
-    "/:id",
-    autenticar,
-    removerSolicitacao
-);
+router.post("/", criarSolicitacao);
+router.get("/", listarSolicitacoes);
+router.put("/:id", atualizarSolicitacao);
+router.delete("/:id", removerSolicitacao);
 
 export default router;

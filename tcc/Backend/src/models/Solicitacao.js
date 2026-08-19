@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const solicitacaoSchema = new mongoose.Schema(
     {
-        adotante: {
+        usuario: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Usuario",
             required: true
@@ -14,15 +14,16 @@ const solicitacaoSchema = new mongoose.Schema(
             required: true
         },
 
-        mensagem: {
-            type: String,
-            required: true
-        },
-
         status: {
             type: String,
-            enum: ["Pendente", "Aprovada", "Recusada"],
-            default: "Pendente"
+            enum: ["pendente", "aprovada", "recusada"],
+            default: "pendente"
+        },
+
+        mensagem: {
+            type: String,
+            trim: true,
+            default: ""
         }
     },
     {
@@ -30,7 +31,9 @@ const solicitacaoSchema = new mongoose.Schema(
     }
 );
 
-export default mongoose.model(
+const Solicitacao = mongoose.model(
     "Solicitacao",
     solicitacaoSchema
 );
+
+export default Solicitacao;

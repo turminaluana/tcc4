@@ -1,17 +1,13 @@
 import express from "express";
 
 import {
+    cadastrar,
     login
 } from "../controllers/authController.js";
 
 const router = express.Router();
 
+router.post("/cadastro", cadastrar);
 router.post("/login", login);
-
-router.get("/", (req, res) => {
-    res.json({
-        mensagem: "Rota de autenticação funcionando!"
-    });
-});
 
 export default router;

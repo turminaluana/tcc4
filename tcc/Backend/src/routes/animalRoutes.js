@@ -1,20 +1,17 @@
 import express from "express";
 
 import {
+    cadastrarAnimal,
     listarAnimais,
-    criarAnimal,
     atualizarAnimal,
-    excluirAnimal
+    removerAnimal
 } from "../controllers/animalController.js";
 
 const router = express.Router();
 
+router.post("/", cadastrarAnimal);
 router.get("/", listarAnimais);
-
-router.post("/", criarAnimal);
-
 router.put("/:id", atualizarAnimal);
-
-router.delete("/:id", excluirAnimal);
+router.delete("/:id", removerAnimal);
 
 export default router;

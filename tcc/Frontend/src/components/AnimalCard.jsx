@@ -1,57 +1,83 @@
 import React from "react";
-import "./AnimalCard.css";
+import { useNavigate } from "react-router-dom";
+
 
 function AnimalCard({ animal }) {
-  return (
-    <div className="animal-card">
 
-      <div className="animal-foto">
-        {animal.foto ? (
-          <img
-            src={animal.foto}
-            alt={animal.nome}
-          />
-        ) : (
-          <span>🐾</span>
-        )}
-      </div>
+    const navigate = useNavigate();
 
-      <div className="animal-info">
+    function solicitarAdocao() {
 
-        <h3>{animal.nome}</h3>
+        navigate(`/solicitar-adocao/${animal._id}`);
 
-        <p>
-          <strong>Espécie:</strong> {animal.especie}
-        </p>
+    }
 
-        <p>
-          <strong>Raça:</strong> {animal.raca}
-        </p>
+    return (
+        <div className="animal-card">
 
-        <p>
-          <strong>Idade:</strong> {animal.idade} anos
-        </p>
+            <div className="animal-foto">
 
-        <p>
-          <strong>Sexo:</strong> {animal.sexo}
-        </p>
+                {animal.imagem ? (
 
-        <p>
-          <strong>Saúde:</strong> {animal.statusSaude}
-        </p>
+                    <img
+                        src={animal.imagem}
+                        alt={animal.nome}
+                    />
 
-        <p className="descricao">
-          {animal.descricao}
-        </p>
+                ) : (
 
-        <button>
-          Quero Adotar 🐾
-        </button>
+                    <span>
+                        🐾
+                    </span>
 
-      </div>
+                )}
 
-    </div>
-  );
+            </div>
+
+            <div className="animal-info">
+
+                <h3>
+                    {animal.nome}
+                </h3>
+
+                <p>
+                    <strong>Espécie:</strong>{" "}
+                    {animal.especie}
+                </p>
+
+                <p>
+                    <strong>Raça:</strong>{" "}
+                    {animal.raca}
+                </p>
+
+                <p>
+                    <strong>Idade:</strong>{" "}
+                    {animal.idade} anos
+                </p>
+
+                <p>
+                    <strong>Sexo:</strong>{" "}
+                    {animal.sexo}
+                </p>
+
+                {animal.descricao && (
+                    <p className="descricao">
+                        {animal.descricao}
+                    </p>
+                )}
+
+                <button
+                  onClick={() =>
+                    navigate(`/solicitar-adocao/${animal._id}`)
+                  }
+                >
+                  Quero Adotar 🐾
+                </button>
+
+            </div>
+
+        </div>
+    );
 }
 
 export default AnimalCard;

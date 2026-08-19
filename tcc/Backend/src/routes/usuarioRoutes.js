@@ -8,41 +8,16 @@ import {
     removerUsuario
 } from "../controllers/usuarioController.js";
 
-import {
-    autenticar,
-    somenteAdmin
-} from "../middleware/auth.js";
-
 const router = express.Router();
 
 router.post("/", criarUsuario);
 
+router.get("/", listarUsuarios);
+
+router.get("/:id", buscarUsuario);
+
 router.put("/:id", atualizarUsuario);
 
-router.get(
-    "/",
-    autenticar,
-    somenteAdmin,
-    listarUsuarios
-);
-
-router.get(
-    "/:id",
-    autenticar,
-    buscarUsuario
-);
-
-router.put(
-    "/:id",
-    autenticar,
-    atualizarUsuario
-);
-
-router.delete(
-    "/:id",
-    autenticar,
-    somenteAdmin,
-    removerUsuario
-);
+router.delete("/:id", removerUsuario);
 
 export default router;

@@ -4,47 +4,74 @@ import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 
 function Navbar() {
-  const { usuario, logout } = useContext(UserContext);
-  const navigate = useNavigate();
 
-  function sair() {
-    logout();
-    navigate("/login");
-  }
+    const { usuario, logout } =
+        useContext(UserContext);
 
-  return (
-    <nav className="navbar">
+    const navigate = useNavigate();
 
-      <Link to="/animais" className="logo">
-        AdotaPet 🐾
-      </Link>
+    function sair() {
 
-      <div className="navbar-direita">
+        logout();
 
-        {usuario && (
-          <span>
-            Olá, {usuario.nome}! 👋
-          </span>
-        )}
+        navigate("/login");
+    }
 
-        <Link to="/animais">
-          Animais
-        </Link>
+    return (
+        <nav className="navbar">
 
-        {usuario ? (
-          <button onClick={sair}>
-            Sair
-          </button>
-        ) : (
-          <Link to="/login">
-            Entrar
-          </Link>
-        )}
+            <Link
+                to="/animais"
+                className="logo"
+            >
+                AdotaPet 🐾
+            </Link>
 
-      </div>
+            <div className="navbar-direita">
 
-    </nav>
-  );
+                {usuario && (
+                    <span>
+                        Olá, {usuario.nome}! 👋
+                    </span>
+                )}
+
+                <Link to="/animais">
+                    Animais
+                </Link>
+
+                {usuario && (
+                    <Link to="/minhas-solicitacoes">
+                        Minhas solicitações
+                    </Link>
+                )}
+
+                {usuario?.tipo === "admin" && (
+                    <Link to="/admin">
+                        Painel Admin
+                    </Link>
+                )}
+
+                {usuario ? (
+
+                    <button
+                        type="button"
+                        onClick={sair}
+                    >
+                        Sair
+                    </button>
+
+                ) : (
+
+                    <Link to="/login">
+                        Entrar
+                    </Link>
+
+                )}
+
+            </div>
+
+        </nav>
+    );
 }
 
 export default Navbar;

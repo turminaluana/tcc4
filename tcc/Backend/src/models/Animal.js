@@ -4,18 +4,20 @@ const animalSchema = new mongoose.Schema(
     {
         nome: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
 
         especie: {
             type: String,
             required: true,
-            enum: ["Cachorro", "Gato", "Outro"]
+            enum: ["cachorro", "gato", "outro"]
         },
 
         raca: {
             type: String,
-            default: "Não informada"
+            required: true,
+            trim: true
         },
 
         idade: {
@@ -26,19 +28,19 @@ const animalSchema = new mongoose.Schema(
 
         sexo: {
             type: String,
-            enum: ["Macho", "Fêmea"],
-            required: true
+            required: true,
+            enum: ["macho", "femea"]
         },
 
         descricao: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
 
-        statusSaude: {
+        imagem: {
             type: String,
-            enum: ["Saudável", "Em tratamento"],
-            default: "Saudável"
+            default: ""
         },
 
         disponivel: {
@@ -51,4 +53,6 @@ const animalSchema = new mongoose.Schema(
     }
 );
 
-export default mongoose.model("Animal", animalSchema);
+const Animal = mongoose.model("Animal", animalSchema);
+
+export default Animal;

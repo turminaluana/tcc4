@@ -1,8 +1,7 @@
 import Animal from "../models/Animal.js";
 
-export async function criarAnimal(req, res) {
+export async function cadastrarAnimal(req, res) {
     try {
-
         const {
             nome,
             especie,
@@ -10,12 +9,19 @@ export async function criarAnimal(req, res) {
             idade,
             sexo,
             descricao,
-            foto
+            imagem
         } = req.body;
 
-        if (!nome || !especie || !idade || !sexo) {
+        if (
+            !nome ||
+            !especie ||
+            !raca ||
+            idade === undefined ||
+            !sexo ||
+            !descricao
+        ) {
             return res.status(400).json({
-                mensagem: "Nome, espécie, idade e sexo são obrigatórios."
+                mensagem: "Preencha todos os campos obrigatórios."
             });
         }
 
@@ -26,62 +32,36 @@ export async function criarAnimal(req, res) {
             idade,
             sexo,
             descricao,
-            foto,
-            disponivel: true
+            imagem
         });
 
         return res.status(201).json({
-            mensagem: "Animal cadastrado com sucesso.",
+            mensagem: "Animal cadastrado com sucesso!",
             animal
         });
 
     } catch (error) {
-
-        console.error("ERRO AO CADASTRAR ANIMAL:", error);
+        console.error(error);
 
         return res.status(500).json({
-            mensagem: "Erro ao cadastrar animal.",
-            erro: error.message
+            mensagem: "Erro ao cadastrar animal."
         });
     }
 }
+
 
 export async function listarAnimais(req, res) {
     try {
+        const animais = await Animal.find()
+            .sort({ createdAt: -1 });
 
-        const animais = await Animal.find();
-
-        return res.json(animais);
+        return res.status(200).json(animais);
 
     } catch (error) {
-
-        console.error("ERRO AO LISTAR ANIMAIS:", error);
+        console.error(error);
 
         return res.status(500).json({
-            mensagem: "Erro ao buscar animais.",
-            erro: error.message
-        });
-    }
-}
-
-export async function buscarAnimal(req, res) {
-    try {
-        const animal = await Animal.findById(
-            req.params.id
-        );
-
-        if (!animal) {
-            return res.status(404).json({
-                mensagem: "Animal não encontrado."
-            });
-        }
-
-        res.json(animal);
-
-    } catch (error) {
-
-        res.status(500).json({
-            mensagem: "Erro ao buscar animal."
+            mensagem: "Erro ao listar animais."
         });
     }
 }
@@ -90,18 +70,17 @@ export async function atualizarAnimal(req, res) {
     try {
         const { id } = req.params;
 
-        const {
-            nome,
-            especie,
-            raca,
-            idade,
-            sexo,
-            descricao,
-            foto,
-            disponivel
-        } = req.body;
+        console.log("ID recebido:", id);
+        console.log("Dados recebidos:", req.body);
 
-        const animal = await Animal.findById(id);
+        const animal = await Animal.findByIdAndUpdate(
+            id,
+            req.body,
+            {
+                new: true,
+                runValidators: true
+            }
+        );
 
         if (!animal) {
             return res.status(404).json({
@@ -109,24 +88,13 @@ export async function atualizarAnimal(req, res) {
             });
         }
 
-        if (nome !== undefined) animal.nome = nome;
-        if (especie !== undefined) animal.especie = especie;
-        if (raca !== undefined) animal.raca = raca;
-        if (idade !== undefined) animal.idade = idade;
-        if (sexo !== undefined) animal.sexo = sexo;
-        if (descricao !== undefined) animal.descricao = descricao;
-        if (foto !== undefined) animal.foto = foto;
-        if (disponivel !== undefined) animal.disponivel = disponivel;
-
-        await animal.save();
-
-        return res.json({
-            mensagem: "Animal atualizado com sucesso.",
+        return res.status(200).json({
+            mensagem: "Animal atualizado com sucesso!",
             animal
         });
 
     } catch (error) {
-        console.error("ERRO AO ATUALIZAR ANIMAL:", error);
+        console.error("ERRO AO ATUALIZAR:", error);
 
         return res.status(500).json({
             mensagem: "Erro ao atualizar animal.",
@@ -136,11 +104,11 @@ export async function atualizarAnimal(req, res) {
 }
 
 
-export async function excluirAnimal(req, res) {
+export async function removerAnimal(req, res) {
     try {
         const { id } = req.params;
 
-        const animal = await Animal.findById(id);
+        const animal = await Animal.findByIdAndDelete(id);
 
         if (!animal) {
             return res.status(404).json({
@@ -148,18 +116,15 @@ export async function excluirAnimal(req, res) {
             });
         }
 
-        await Animal.findByIdAndDelete(id);
-
-        return res.json({
-            mensagem: "Animal excluído com sucesso."
+        return res.status(200).json({
+            mensagem: "Animal removido com sucesso!"
         });
 
     } catch (error) {
-        console.error("ERRO AO EXCLUIR ANIMAL:", error);
+        console.error(error);
 
         return res.status(500).json({
-            mensagem: "Erro ao excluir animal.",
-            erro: error.message
+            mensagem: "Erro ao remover animal."
         });
     }
 }

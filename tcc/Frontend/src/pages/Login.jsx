@@ -1,16 +1,20 @@
 import React, { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
 
 import { UserContext } from "../context/UserContext";
 
 function Login() {
 
-  const [cpf, setCpf] = useState("");
+  const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
   const [mensagem, setMensagem] = useState("");
+
   const navigate = useNavigate();
+
   const { login } = useContext(UserContext);
+
 
   async function fazerLogin(e) {
 
@@ -18,89 +22,215 @@ function Login() {
 
     setMensagem("");
 
+
+    // ================================
+    // ADMINISTRADOR PRÉ-DEFINIDO
+    // ================================
+
+    if (
+      email.toLowerCase().trim() === "admin@gmail.com" &&
+      senha === "123456"
+    ) {
+
+      const gerente = {
+        id: "1",
+        nome: "Administrador",
+        email: "admin@gmail.com",
+        tipo: "admin"
+      };
+
+
+      console.log(
+        "LOGIN ADMIN:",
+        gerente
+      );
+
+
+      // Salva o administrador no contexto
+      login(gerente);
+
+
+      setMensagem(
+        "Login realizado com sucesso! ✅"
+      );
+
+
+      // Vai para a área administrativa
+      setTimeout(() => {
+
+        navigate("/admin");
+
+      }, 800);
+
+
+      return;
+    }
+
+
+    // ================================
+    // LOGIN NORMAL
+    // ================================
+
     try {
 
       const resposta = await axios.post(
         "http://localhost:3000/api/auth/login",
         {
-          cpf: cpf,
-          senha: senha
+          email,
+          senha
         }
       );
 
-      console.log("LOGIN:", resposta.data);
+
+      console.log(
+        "LOGIN:",
+        resposta.data
+      );
+
 
       login(resposta.data.usuario);
 
-      setMensagem("Login realizado com sucesso! ✅");
+
+      setMensagem(
+        "Login realizado com sucesso! ✅"
+      );
+
 
       setTimeout(() => {
-        navigate("/animais");
-      }, 1000);
 
-      console.log("Usuário:", resposta.data);
+        if (
+          resposta.data.usuario.tipo === "admin"
+        ) {
+
+          navigate("/admin");
+
+        } else {
+
+          navigate("/animais");
+
+        }
+
+      }, 800);
+
 
     } catch (erro) {
 
-      console.error("ERRO LOGIN:", erro);
+      console.error(
+        "ERRO LOGIN:",
+        erro
+      );
+
 
       if (erro.response) {
-        setMensagem(
-          erro.response.data.mensagem || "Erro ao fazer login."
-        );
-      } else {
-        setMensagem("Não foi possível conectar ao servidor.");
-      }
 
+        setMensagem(
+          erro.response.data.mensagem ||
+          "Erro ao fazer login."
+        );
+
+      } else {
+
+        setMensagem(
+          "Não foi possível conectar ao servidor."
+        );
+
+      }
     }
   }
 
+
   return (
-    <div>
 
-      <h1>AdotaPet 🐾</h1>
+    <div className="auth-container">
 
-      <h2>Entrar</h2>
+      <div className="auth-card">
 
-      <form onSubmit={fazerLogin}>
+        <h1>
+          AdotaPet 🐾
+        </h1>
 
-        <div>
-          <label>CPF</label>
-
-          <input
-            type="text"
-            value={cpf}
-            onChange={(e) => setCpf(e.target.value)}
-            placeholder="Digite seu CPF"
-          />
-        </div>
-
-        <br />
-
-        <div>
-          <label>Senha</label>
-
-          <input
-            type="password"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-            placeholder="Digite sua senha"
-          />
-        </div>
-
-        <br />
-
-        <button type="submit">
+        <h2>
           Entrar
-        </button>
+        </h2>
 
-      </form>
 
-      {mensagem && (
-        <p>{mensagem}</p>
-      )}
+        <form onSubmit={fazerLogin}>
+
+          <div>
+
+            <label>
+              E-mail
+            </label>
+
+            <input
+              type="email"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+              placeholder="Digite seu e-mail"
+              required
+            />
+
+          </div>
+
+
+          <div>
+
+            <label>
+              Senha
+            </label>
+
+            <input
+              type="password"
+              value={senha}
+              onChange={(e) =>
+                setSenha(e.target.value)
+              }
+              placeholder="Digite sua senha"
+              required
+            />
+
+          </div>
+
+
+          <button type="submit">
+            Entrar 🐾
+          </button>
+
+        </form>
+
+
+        {mensagem && (
+
+          <p
+            className={
+              mensagem.includes("sucesso")
+                ? "mensagem-sucesso"
+                : "mensagem-erro"
+            }
+            style={{ marginTop: "15px" }}
+          >
+            {mensagem}
+          </p>
+
+        )}
+
+
+        <p className="auth-link">
+
+          Ainda não possui uma conta?{" "}
+
+          <Link to="/cadastro">
+            Criar conta
+          </Link>
+
+        </p>
+
+      </div>
 
     </div>
+
   );
 }
 
