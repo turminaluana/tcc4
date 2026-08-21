@@ -5,9 +5,11 @@ dotenv.config();
 
 async function connectDatabase() {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
+        const conn = await mongoose.connect(process.env.MONGO_URI);
 
         console.log("✅ MongoDB Atlas conectado com sucesso!");
+
+        return conn;
 
     } catch (error) {
 

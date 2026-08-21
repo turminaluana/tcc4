@@ -1,83 +1,87 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { UserContext } from "../context/UserContext";
+import api from "../services/api";
 
 function AnimalCard({ animal }) {
+  const navigate = useNavigate();
+  const { usuario } = useContext(UserContext);
+  const [jaSolicitou, setJaSolicitou] = useState(false);
 
-    const navigate = useNavigate();
+  useEffect(() => {
+    async function checarSolicitacao() {
+      // Se não houver usuário ou se for admin, não precisa checar solicitações
+      if (!usuario || usuario.tipo === "admin") return;
 
-    function solicitarAdocao() {
+      try {
+        const resposta = await api.get("/solicitacoes");
+        // Verifica se há solicitação para este animal que não esteja cancelada
+        const solicitou = resposta.data.some((sol) => {
+          const idAnimalSolicitacao = sol.animal?._id || sol.animal;
+          return idAnimalSolicitacao === animal._id && sol.status !== "cancelada";
+        });
 
-        navigate(`/solicitar-adocao/${animal._id}`);
-
+        setJaSolicitou(solicitou);
+      } catch (error) {
+        console.error("Erro ao verificar status da solicitação:", error);
+      }
     }
 
-    return (
-        <div className="animal-card">
+    checarSolicitacao();
+  }, [usuario, animal._id]);
 
-            <div className="animal-foto">
+  return (
+    <div className="animal-card">
+      <div className="animal-foto">
+        {animal.imagem ? (
+          <img src={animal.imagem} alt={animal.nome} />
+        ) : (
+          <span>🐾</span>
+        )}
+      </div>
 
-                {animal.imagem ? (
+      <div className="animal-info">
+        <h3>{animal.nome}</h3>
 
-                    <img
-                        src={animal.imagem}
-                        alt={animal.nome}
-                    />
+        <p>
+          <strong>Espécie:</strong> {animal.especie}
+        </p>
 
-                ) : (
+        <p>
+          <strong>Raça:</strong> {animal.raca}
+        </p>
 
-                    <span>
-                        🐾
-                    </span>
+        <p>
+          <strong>Idade:</strong> {animal.idade} anos
+        </p>
 
-                )}
+        <p>
+          <strong>Sexo:</strong> {animal.sexo}
+        </p>
 
-            </div>
+        {animal.descricao && (
+          <p className="descricao">{animal.descricao}</p>
+        )}
 
-            <div className="animal-info">
-
-                <h3>
-                    {animal.nome}
-                </h3>
-
-                <p>
-                    <strong>Espécie:</strong>{" "}
-                    {animal.especie}
-                </p>
-
-                <p>
-                    <strong>Raça:</strong>{" "}
-                    {animal.raca}
-                </p>
-
-                <p>
-                    <strong>Idade:</strong>{" "}
-                    {animal.idade} anos
-                </p>
-
-                <p>
-                    <strong>Sexo:</strong>{" "}
-                    {animal.sexo}
-                </p>
-
-                {animal.descricao && (
-                    <p className="descricao">
-                        {animal.descricao}
-                    </p>
-                )}
-
-                <button
-                  onClick={() =>
-                    navigate(`/solicitar-adocao/${animal._id}`)
-                  }
-                >
-                  Quero Adotar 🐾
-                </button>
-
-            </div>
-
-        </div>
-    );
+        {/* Oculta completamente as opções de adoção para o administrador */}
+        {usuario?.tipo !== "admin" && (
+          <>
+            {jaSolicitou ? (
+              <button className="btn-solicitado" disabled>
+                Solicitação enviada 🐾
+              </button>
+            ) : (
+              <button
+                onClick={() => navigate(`/solicitar-adocao/${animal._id}`)}
+              >
+                Quero Adotar 🐾
+              </button>
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default AnimalCard;

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import api from "../services/api";
 
-function CadastrarAnimal() {
+function EditarAnimal() {
+    const { id } = useParams();
     const navigate = useNavigate();
 
     const [nome, setNome] = useState("");
@@ -15,54 +16,111 @@ function CadastrarAnimal() {
     const [foto, setFoto] = useState("");
     const [disponivel, setDisponivel] = useState(true);
 
-    const [carregando, setCarregando] = useState(false);
+    const [carregando, setCarregando] = useState(true);
+    const [salvando, setSalvando] = useState(false);
     const [erro, setErro] = useState("");
 
-    async function handleCadastrar(e) {
-        e.preventDefault();
-        setErro("");
-        setCarregando(true);
+    // Busca todos os animais e localiza o animal pelo ID da URL
+    useEffect(() => {
+        async function carregarAnimal() {
+            try {
+                setCarregando(true);
+                const resposta = await api.get("/animais");
+                const lista = Array.isArray(resposta.data) ? resposta.data : resposta.data.animais || [];
+                
+                // Encontra o animal pelo ID correto (_id ou id)
+                const animal = lista.find((item) => item._id === id || item.id === id);
 
-        const sexoFormatado = sexo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-        const especieFormatada = especie.toLowerCase();
-        const urlImagem = foto.trim();
-
-        // Envia apelidos para imagem (foto, imagem, urlFoto) para bater com qualquer schema do backend
-        const payload = {
-            nome: nome.trim(),
-            especie: especieFormatada,
-            raca: raca.trim(),
-            idade: Number(idade) || idade,
-            sexo: sexoFormatado,
-            disponivel: Boolean(disponivel),
-            foto: urlImagem,
-            imagem: urlImagem,
-            urlFoto: urlImagem
-        };
-
-        if (descricao && descricao.trim()) {
-            payload.descricao = descricao.trim();
-            payload.historia = descricao.trim();
+                if (animal) {
+                    setNome(animal.nome || "");
+                    
+                    if (animal.especie) {
+                        const esp = animal.especie.toLowerCase();
+                        if (esp.includes("gato")) setEspecie("Gato");
+                        else if (esp.includes("cachorro") || esp.includes("cao")) setEspecie("Cachorro");
+                        else setEspecie("Outro");
+                    }
+                    
+                    setRaca(animal.raca || "");
+                    setIdade(animal.idade !== undefined && animal.idade !== null ? String(animal.idade) : "");
+                    
+                    if (animal.sexo) {
+                        const sx = animal.sexo.toLowerCase();
+                        setSexo(sx.startsWith("f") ? "Fêmea" : "Macho");
+                    }
+                    
+                    setDescricao(animal.descricao || animal.historia || "");
+                    setFoto(animal.foto || animal.imagem || animal.urlFoto || "");
+                    setDisponivel(animal.disponivel ?? true);
+                } else {
+                    setErro("Animal não encontrado na base de dados.");
+                }
+            } catch (error) {
+                console.error("ERRO AO BUSCAR ANIMAIS:", error);
+                setErro("Não foi possível carregar as informações do animal.");
+            } finally {
+                setCarregando(false);
+            }
         }
 
-        try {
-            await api.post("/animais", payload);
-            alert("Animal cadastrado com sucesso!");
-            navigate("/admin/animais");
-        } catch (error) {
-            console.error("ERRO COMPLETO DO AXIOS:", error);
-            
-            const mensagemErro = 
-                error.response?.data?.detalhes || 
-                error.response?.data?.error || 
-                error.response?.data?.mensagem || 
-                error.message || 
-                "Erro interno no servidor ao cadastrar animal.";
-
-            setErro(mensagemErro);
-        } finally {
-            setCarregando(false);
+        if (id) {
+            carregarAnimal();
         }
+    }, [id]);
+
+    async function handleEditar(e) {
+    e.preventDefault();
+    setErro("");
+    setSalvando(true);
+
+    const sexoFormatado = sexo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    const especieFormatada = especie.toLowerCase();
+
+    // Mapeia a imagem em múltiplos formatos para o Backend aceitar
+    const urlImagem = foto.trim();
+
+    const payload = {
+        nome: nome.trim(),
+        especie: especieFormatada,
+        raca: raca.trim(),
+        idade: Number(idade) || idade,
+        sexo: sexoFormatado,
+        disponivel: Boolean(disponivel),
+        foto: urlImagem,
+        imagem: urlImagem,
+        urlFoto: urlImagem
+    };
+
+    if (descricao && descricao.trim()) {
+        payload.descricao = descricao.trim();
+        payload.historia = descricao.trim();
+    }
+
+    try {
+        await api.put(`/animais/${id}`, payload);
+        alert("Animal atualizado com sucesso!");
+        navigate("/admin/animais");
+    } catch (error) {
+        console.error("ERRO AO ATUALIZAR ANIMAL:", error.response || error);
+        setErro(
+            error.response?.data?.mensagem ||
+            error.response?.data?.error ||
+            "Erro ao atualizar animal."
+        );
+    } finally {
+        setSalvando(false);
+    }
+}
+
+    if (carregando) {
+        return (
+            <>
+                <Navbar />
+                <p style={{ padding: "40px", textAlign: "center", fontSize: "18px" }}>
+                    Carregando dados do animal... 🐾
+                </p>
+            </>
+        );
     }
 
     return (
@@ -79,17 +137,16 @@ function CadastrarAnimal() {
                 </button>
 
                 <div className="card-formulario">
-                    <h1 className="titulo-form">🐾 Cadastrar Animal</h1>
+                    <h1 className="titulo-form">✏️ Editar Animal</h1>
 
                     {erro && <div className="mensagem-erro">{erro}</div>}
 
-                    <form onSubmit={handleCadastrar}>
+                    <form onSubmit={handleEditar}>
                         <div className="campo-grupo">
                             <label>Nome do Animal *</label>
                             <input
                                 type="text"
                                 required
-                                placeholder="Ex: Rex"
                                 value={nome}
                                 onChange={(e) => setNome(e.target.value)}
                             />
@@ -112,7 +169,6 @@ function CadastrarAnimal() {
                                 <label>Raça</label>
                                 <input
                                     type="text"
-                                    placeholder="Ex: Vira-lata"
                                     value={raca}
                                     onChange={(e) => setRaca(e.target.value)}
                                 />
@@ -124,7 +180,6 @@ function CadastrarAnimal() {
                                 <label>Idade</label>
                                 <input
                                     type="text"
-                                    placeholder="Ex: 2 anos"
                                     value={idade}
                                     onChange={(e) => setIdade(e.target.value)}
                                 />
@@ -146,7 +201,6 @@ function CadastrarAnimal() {
                             <label>URL da Foto (opcional)</label>
                             <input
                                 type="text"
-                                placeholder="https://exemplo.com/foto.jpg"
                                 value={foto}
                                 onChange={(e) => setFoto(e.target.value)}
                             />
@@ -156,7 +210,6 @@ function CadastrarAnimal() {
                             <label>Descrição / História (opcional)</label>
                             <textarea
                                 rows="3"
-                                placeholder="Descrição do animal..."
                                 value={descricao}
                                 onChange={(e) => setDescricao(e.target.value)}
                             />
@@ -176,9 +229,9 @@ function CadastrarAnimal() {
                             <button
                                 type="submit"
                                 className="btn-salvar"
-                                disabled={carregando}
+                                disabled={salvando}
                             >
-                                {carregando ? "Cadastrando..." : "Cadastrar"}
+                                {salvando ? "Salvando..." : "Salvar Alterações"}
                             </button>
 
                             <button
@@ -196,4 +249,4 @@ function CadastrarAnimal() {
     );
 }
 
-export default CadastrarAnimal;
+export default EditarAnimal;

@@ -122,12 +122,19 @@ export async function atualizarUsuario(req, res) {
             });
         }
 
-        if (nome) {
-            usuario.nome = nome;
+        // Se o CPF for alterado, verifica se outro usuário já possui esse CPF
+        if (cpf && cpf !== usuario.cpf) {
+            const cpfExistente = await Usuario.findOne({ cpf, _id: { $ne: id } });
+            if (cpfExistente) {
+                return res.status(400).json({
+                    mensagem: "Este CPF já está cadastrado para outro usuário."
+                });
+            }
+            usuario.cpf = cpf;
         }
 
-        if (cpf) {
-            usuario.cpf = cpf;
+        if (nome) {
+            usuario.nome = nome;
         }
 
         if (telefone) {
@@ -148,6 +155,7 @@ export async function atualizarUsuario(req, res) {
             mensagem: "Dados atualizados com sucesso.",
             usuario: {
                 id: usuario._id,
+                _id: usuario._id,
                 nome: usuario.nome,
                 cpf: usuario.cpf,
                 telefone: usuario.telefone,

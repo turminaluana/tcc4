@@ -15,9 +15,12 @@ import Cadastro from "./pages/Cadastro";
 import Animais from "./pages/Animais";
 import SolicitarAdocao from "./pages/SolicitarAdocao";
 import MinhasSolicitacoes from "./pages/MinhasSolicitacoes";
+import MinhaConta from "./pages/MinhaConta";
 import Admin from "./pages/Admin";
 import AdminAnimais from "./pages/AdminAnimais";
 import CadastrarAnimal from "./pages/CadastrarAnimal";
+import EditarAnimal from "./pages/EditarAnimal";
+import AdminUsuarios from "./pages/AdminUsuarios"; // Importação da página de gerenciamento de usuários
 import AdminRoute from "./components/AdminRoute";
 
 function App() {
@@ -76,6 +79,15 @@ function App() {
                     />
 
                     <Route
+                      path="/minha-conta"
+                      element={
+                        <PrivateRoute>
+                          <MinhaConta />
+                        </PrivateRoute>
+                      }
+                    />
+
+                    <Route
                       path="/admin"
                       element={
                         <AdminRoute>
@@ -98,6 +110,26 @@ function App() {
                       element={
                           <AdminRoute>
                               <CadastrarAnimal />
+                          </AdminRoute>
+                      }
+                  />
+
+                  {/* Rota para Editar Animal */}
+                  <Route
+                      path="/admin/animais/editar/:id"
+                      element={
+                          <AdminRoute>
+                              <EditarAnimal />
+                          </AdminRoute>
+                      }
+                  />
+
+                  {/* Nova rota para Gerenciamento de Usuários */}
+                  <Route
+                      path="/admin/usuarios"
+                      element={
+                          <AdminRoute>
+                              <AdminUsuarios />
                           </AdminRoute>
                       }
                   />

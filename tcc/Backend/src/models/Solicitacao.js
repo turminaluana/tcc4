@@ -16,7 +16,7 @@ const solicitacaoSchema = new mongoose.Schema(
 
         status: {
             type: String,
-            enum: ["pendente", "aprovada", "recusada"],
+            enum: ["pendente", "aprovada", "recusada", 'cancelada'],
             default: "pendente"
         },
 
