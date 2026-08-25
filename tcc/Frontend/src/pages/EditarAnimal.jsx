@@ -69,48 +69,50 @@ function EditarAnimal() {
     }, [id]);
 
     async function handleEditar(e) {
-    e.preventDefault();
-    setErro("");
-    setSalvando(true);
+        e.preventDefault();
+        setErro("");
+        setSalvando(true);
 
-    const sexoFormatado = sexo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-    const especieFormatada = especie.toLowerCase();
+        const sexoFormatado = sexo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const especieFormatada = especie.toLowerCase();
 
-    // Mapeia a imagem em múltiplos formatos para o Backend aceitar
-    const urlImagem = foto.trim();
+        // Mapeia a imagem em múltiplos formatos para o Backend aceitar
+        const urlImagem = foto.trim();
 
-    const payload = {
-        nome: nome.trim(),
-        especie: especieFormatada,
-        raca: raca.trim(),
-        idade: Number(idade) || idade,
-        sexo: sexoFormatado,
-        disponivel: Boolean(disponivel),
-        foto: urlImagem,
-        imagem: urlImagem,
-        urlFoto: urlImagem
-    };
+        const payload = {
+            nome: nome.trim(),
+            especie: especieFormatada,
+            raca: raca.trim(),
+            idade: Number(idade) || idade,
+            sexo: sexoFormatado,
+            disponivel: Boolean(disponivel),
+            foto: urlImagem,
+            imagem: urlImagem,
+            urlFoto: urlImagem
+        };
 
-    if (descricao && descricao.trim()) {
-        payload.descricao = descricao.trim();
-        payload.historia = descricao.trim();
+        if (descricao && descricao.trim()) {
+            payload.descricao = descricao.trim();
+            payload.historia = descricao.trim();
+        }
+
+        try {
+            await api.put(`/animais/${id}`, payload);
+            alert("Animal atualizado com sucesso!");
+            
+            // 🟢 Redireciona de volta para o Painel Principal do Admin
+            navigate("/admin");
+        } catch (error) {
+            console.error("ERRO AO ATUALIZAR ANIMAL:", error.response || error);
+            setErro(
+                error.response?.data?.mensagem ||
+                error.response?.data?.error ||
+                "Erro ao atualizar animal."
+            );
+        } finally {
+            setSalvando(false);
+        }
     }
-
-    try {
-        await api.put(`/animais/${id}`, payload);
-        alert("Animal atualizado com sucesso!");
-        navigate("/admin/animais");
-    } catch (error) {
-        console.error("ERRO AO ATUALIZAR ANIMAL:", error.response || error);
-        setErro(
-            error.response?.data?.mensagem ||
-            error.response?.data?.error ||
-            "Erro ao atualizar animal."
-        );
-    } finally {
-        setSalvando(false);
-    }
-}
 
     if (carregando) {
         return (
@@ -131,7 +133,7 @@ function EditarAnimal() {
                 <button
                     type="button"
                     className="btn-voltar"
-                    onClick={() => navigate("/admin/animais")}
+                    onClick={() => navigate("/admin")}
                 >
                     ← Voltar para o painel
                 </button>
@@ -237,7 +239,7 @@ function EditarAnimal() {
                             <button
                                 type="button"
                                 className="btn-cancelar"
-                                onClick={() => navigate("/admin/animais")}
+                                onClick={() => navigate("/admin")}
                             >
                                 Cancelar
                             </button>

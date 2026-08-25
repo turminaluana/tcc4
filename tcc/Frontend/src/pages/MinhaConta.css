@@ -83,7 +83,7 @@
 }
 
 .btn-editar, .btn-salvar {
-  background-color: #4caf50;
+  background-color: #853333;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -94,7 +94,7 @@
 }
 
 .btn-editar:hover, .btn-salvar:hover {
-  background-color: #43a047;
+  background-color: #a84343;
 }
 
 .btn-cancelar {

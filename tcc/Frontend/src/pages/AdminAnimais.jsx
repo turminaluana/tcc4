@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import Navbar from "../components/Navbar";
 import api from "../services/api";
 
 function AdminAnimais() {
@@ -41,107 +39,117 @@ function AdminAnimais() {
     }
 
     return (
-        <>
-            <Navbar />
+        <section className="secao-admin-animais">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
+                <h2>Gerenciar animais 🐾</h2>
 
-            <main className="admin" style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-                <h1>Gerenciar animais 🐾</h1>
+                <button 
+                    type="button" 
+                    onClick={() => navigate("/admin/animais/cadastrar")}
+                    style={{ 
+                        backgroundColor: "#2e7d32", 
+                        color: "#fff", 
+                        border: "none", 
+                        padding: "10px 16px", 
+                        borderRadius: "6px", 
+                        fontWeight: "bold", 
+                        cursor: "pointer" 
+                    }}
+                >
+                    + Cadastrar animal
+                </button>
+            </div>
 
-                <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-                    <button type="button" onClick={() => navigate("/admin")}>
-                        ← Voltar para o painel
-                    </button>
+            {carregando && <p>Carregando animais...</p>}
+            {erro && <p style={{ color: "red" }}>{erro}</p>}
 
-                    <button 
-                        type="button" 
-                        onClick={() => navigate("/admin/animais/cadastrar")}
-                        style={{ backgroundColor: "#2e7d32", color: "#fff", border: "none", padding: "10px 16px", borderRadius: "6px", fontWeight: "bold", cursor: "pointer" }}
-                    >
-                        + Cadastrar animal
-                    </button>
-                </div>
+            {!carregando && !erro && animais.length === 0 && (
+                <p>Nenhum animal cadastrado.</p>
+            )}
 
-                {carregando && <p>Carregando animais...</p>}
-                {erro && <p style={{ color: "red" }}>{erro}</p>}
+            {!carregando && animais.length > 0 && (
+                <div className="lista-admin-animais">
+                    {animais.map((animal) => {
+                        const temFoto = animal.foto || animal.imagem || animal.urlFoto;
 
-                {!carregando && !erro && animais.length === 0 && (
-                    <p>Nenhum animal cadastrado.</p>
-                )}
-
-                {!carregando && animais.length > 0 && (
-                    <div className="lista-admin-animais">
-                        {animais.map((animal) => {
-                            const temFoto = animal.foto || animal.imagem || animal.urlFoto;
-
-                            return (
-                                <div 
-                                    className="animal-admin-card" 
-                                    key={animal._id} 
-                                    style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}
-                                >
-                                    {/* Grupo da Esquerda: Imagem + Informações (sem alterar seus textos originais) */}
-                                    <div style={{ display: "flex", alignItems: "center", gap: "25px" }}>
-                                        
-                                        {/* Container da Imagem (Maior e com fallback estilo usuário) */}
-                                        <div style={{ 
-                                            width: "140px", 
-                                            height: "140px", 
-                                            flexShrink: 0,
-                                            backgroundColor: "#f5f5f5", 
-                                            borderRadius: "10px", 
-                                            display: "flex", 
-                                            alignItems: "center", 
-                                            justifyContent: "center", 
-                                            overflow: "hidden",
-                                            border: "1px solid #ddd"
-                                        }}>
-                                            {temFoto ? (
-                                                <img 
-                                                    src={temFoto} 
-                                                    alt={animal.nome} 
-                                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                                                    onError={(e) => { 
-                                                        e.target.style.display = 'none'; 
+                        return (
+                            <div 
+                                className="animal-admin-card" 
+                                key={animal._id} 
+                                style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "15px" }}
+                            >
+                                {/* Grupo da Esquerda: Imagem + Informações */}
+                                <div style={{ display: "flex", alignItems: "center", gap: "25px" }}>
+                                    
+                                    {/* Container da Imagem */}
+                                    <div style={{ 
+                                        width: "140px", 
+                                        height: "140px", 
+                                        flexShrink: 0,
+                                        backgroundColor: "#f5f5f5", 
+                                        borderRadius: "10px", 
+                                        display: "flex", 
+                                        alignItems: "center", 
+                                        justifyContent: "center", 
+                                        overflow: "hidden",
+                                        border: "1px solid #ddd"
+                                    }}>
+                                        {temFoto ? (
+                                            <img 
+                                                src={temFoto} 
+                                                alt={animal.nome} 
+                                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                                onError={(e) => { 
+                                                    e.target.style.display = 'none'; 
+                                                    if (e.target.nextSibling) {
                                                         e.target.nextSibling.style.display = 'block'; 
-                                                    }}
-                                                />
-                                            ) : null}
-                                            
-                                            {/* Ícone exibido se não houver foto ou se a URL falhar */}
-                                            <span style={{ fontSize: "50px", display: temFoto ? "none" : "block" }}>🐾</span>
-                                        </div>
-
-                                        {/* Seus textos originais */}
-                                        <div className="animal-admin-info">
-                                            <h2>{animal.nome}</h2>
-                                            <p><strong>Espécie:</strong> {animal.especie}</p>
-                                            <p><strong>Raça:</strong> {animal.raca}</p>
-                                            <p><strong>Idade:</strong> {animal.idade}</p>
-                                            <p><strong>Sexo:</strong> {animal.sexo}</p>
-                                            <p>
-                                                <strong>Disponível:</strong>{" "}
-                                                {animal.disponivel ? "Sim ✅" : "Não ❌"}
-                                            </p>
-                                        </div>
+                                                    }
+                                                }}
+                                            />
+                                        ) : null}
+                                        
+                                        {/* Ícone exibido se não houver foto ou se a URL falhar */}
+                                        <span style={{ fontSize: "50px", display: temFoto ? "none" : "block" }}>🐾</span>
                                     </div>
 
-                                    {/* Grupo da Direita: Botões Originais */}
-                                    <div className="animal-admin-acoes">
-                                        <button type="button" onClick={() => navigate(`/admin/animais/editar/${animal._id}`)}>
-                                            ✏️ Editar
-                                        </button>
-
-                                        <button type="button" onClick={() => excluirAnimal(animal._id)}>
-                                            🗑️ Excluir
-                                        </button>
+                                    {/* Textos Informativos */}
+                                    <div className="animal-admin-info">
+                                        <h3 style={{ margin: "0 0 5px 0", fontSize: "1.3rem" }}>{animal.nome}</h3>
+                                        <p style={{ margin: "2px 0" }}><strong>Espécie:</strong> {animal.especie}</p>
+                                        <p style={{ margin: "2px 0" }}><strong>Raça:</strong> {animal.raca}</p>
+                                        <p style={{ margin: "2px 0" }}><strong>Idade:</strong> {animal.idade}</p>
+                                        <p style={{ margin: "2px 0" }}><strong>Sexo:</strong> {animal.sexo}</p>
+                                        <p style={{ margin: "2px 0" }}>
+                                            <strong>Disponível:</strong>{" "}
+                                            {animal.disponivel ? "Sim ✅" : "Não ❌"}
+                                        </p>
                                     </div>
                                 </div>
-                            );
-                        })}
-                    </div>
-                )}
-            </main>
-        </>
+
+                                {/* Grupo da Direita: Botões */}
+                                <div className="animal-admin-acoes" style={{ display: "flex", gap: "10px" }}>
+                                    <button 
+                                        type="button" 
+                                        onClick={() => navigate(`/admin/animais/editar/${animal._id}`)}
+                                        style={{ padding: "8px 14px", cursor: "pointer" }}
+                                    >
+                                        ✏️ Editar
+                                    </button>
+
+                                    <button 
+                                        type="button" 
+                                        onClick={() => excluirAnimal(animal._id)}
+                                        style={{ padding: "8px 14px", cursor: "pointer" }}
+                                    >
+                                        🗑️ Excluir
+                                    </button>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
+        </section>
     );
 }
 

@@ -58,9 +58,9 @@ export async function criarSolicitacao(req, res) {
       mensagem: mensagem || ""
     });
 
-    // Busca os dados completos
+    // Busca os dados completos (Adicionado "endereco" aqui)
     const solicitacaoCompleta = await Solicitacao.findById(solicitacao._id)
-      .populate("usuario", "nome email telefone")
+      .populate("usuario", "nome email telefone endereco")
       .populate("animal", "nome especie raca idade sexo imagem");
 
     return res.status(201).json({
@@ -81,8 +81,9 @@ export async function criarSolicitacao(req, res) {
 ===================================== */
 export async function listarSolicitacoes(req, res) {
   try {
+    // Adicionado "endereco" ao populate do usuário
     const solicitacoes = await Solicitacao.find()
-      .populate("usuario", "nome email cpf telefone")
+      .populate("usuario", "nome email cpf telefone endereco")
       .populate("animal", "nome especie raca idade sexo imagem")
       .sort({ createdAt: -1 });
 

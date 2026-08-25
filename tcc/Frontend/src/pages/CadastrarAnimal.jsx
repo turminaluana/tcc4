@@ -48,7 +48,9 @@ function CadastrarAnimal() {
         try {
             await api.post("/animais", payload);
             alert("Animal cadastrado com sucesso!");
-            navigate("/admin/animais");
+            
+            // 🟢 Redireciona diretamente para o Painel do Administrador
+            navigate("/admin");
         } catch (error) {
             console.error("ERRO COMPLETO DO AXIOS:", error);
             
@@ -73,7 +75,7 @@ function CadastrarAnimal() {
                 <button
                     type="button"
                     className="btn-voltar"
-                    onClick={() => navigate("/admin/animais")}
+                    onClick={() => navigate("/admin")}
                 >
                     ← Voltar para o painel
                 </button>
@@ -184,7 +186,7 @@ function CadastrarAnimal() {
                             <button
                                 type="button"
                                 className="btn-cancelar"
-                                onClick={() => navigate("/admin/animais")}
+                                onClick={() => navigate("/admin")}
                             >
                                 Cancelar
                             </button>

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
 import Navbar from "../components/Navbar";
 import api from "../services/api";
 
+// Import das páginas existentes na sua pasta pages
+import AdminAnimais from "./AdminAnimais";
+import AdminUsuarios from "./AdminUsuarios";
+
 function Admin() {
-    const navigate = useNavigate();
+    // Estado para controlar a aba ativa: 'solicitacoes', 'animais' ou 'usuarios'
+    const [abaAtiva, setAbaAtiva] = useState("solicitacoes");
 
     const [animais, setAnimais] = useState([]);
     const [usuarios, setUsuarios] = useState([]);
@@ -27,7 +30,6 @@ function Admin() {
                     api.get("/solicitacoes")
                 ]);
 
-                // Tratamento flexível para aceitar Array direto ou dentro de um objeto
                 const listaAnimais = Array.isArray(respostaAnimais.data) 
                     ? respostaAnimais.data 
                     : respostaAnimais.data?.animais || [];
@@ -43,7 +45,6 @@ function Admin() {
                 setAnimais(listaAnimais);
                 setUsuarios(listaUsuarios);
 
-                // Filtra para não mostrar solicitações canceladas
                 const solicitacoesAtivas = listaSolicitacoes.filter(
                     (sol) => sol?.status?.toLowerCase() !== "cancelada" && sol?.status?.toLowerCase() !== "cancelado"
                 );
@@ -81,7 +82,7 @@ function Admin() {
         return (
             <>
                 <Navbar />
-                <main className="admin">
+                <main className="admin" style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
                     <h1>Painel Administrativo 👑</h1>
                     <p>Carregando dados...</p>
                 </main>
@@ -99,7 +100,7 @@ function Admin() {
 
                 {erro && <p className="erro-msg" style={{ color: "red" }}>{erro}</p>}
 
-                {/* Cards Interativos de Estatísticas */}
+                {/* CARDS FIXOS DO TOPO (ALTERAM A ABA ATIVA) */}
                 <div 
                     className="admin-cards" 
                     style={{ 
@@ -112,23 +113,15 @@ function Admin() {
                     {/* Card Animais */}
                     <div 
                         className="admin-card" 
-                        onClick={() => navigate("/admin/animais")}
+                        onClick={() => setAbaAtiva("animais")}
                         style={{ 
                             background: "#fff", 
                             padding: "15px", 
                             borderRadius: "8px", 
-                            boxShadow: "0 2px 5px rgba(0,0,0,0.1)", 
+                            boxShadow: abaAtiva === "animais" ? "0 0 0 2px #2d6a4f" : "0 2px 5px rgba(0,0,0,0.1)", 
                             textAlign: "center",
                             cursor: "pointer",
-                            transition: "transform 0.2s, box-shadow 0.2s"
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = "translateY(-3px)";
-                            e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.15)";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = "translateY(0)";
-                            e.currentTarget.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
+                            transition: "all 0.2s"
                         }}
                     >
                         <span style={{ fontSize: "2rem" }}>🐾</span>
@@ -139,23 +132,15 @@ function Admin() {
                     {/* Card Usuários */}
                     <div 
                         className="admin-card" 
-                        onClick={() => navigate("/admin/usuarios")}
+                        onClick={() => setAbaAtiva("usuarios")}
                         style={{ 
                             background: "#fff", 
                             padding: "15px", 
                             borderRadius: "8px", 
-                            boxShadow: "0 2px 5px rgba(0,0,0,0.1)", 
+                            boxShadow: abaAtiva === "usuarios" ? "0 0 0 2px #2d6a4f" : "0 2px 5px rgba(0,0,0,0.1)", 
                             textAlign: "center",
                             cursor: "pointer",
-                            transition: "transform 0.2s, box-shadow 0.2s"
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = "translateY(-3px)";
-                            e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.15)";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = "translateY(0)";
-                            e.currentTarget.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
+                            transition: "all 0.2s"
                         }}
                     >
                         <span style={{ fontSize: "2rem" }}>👥</span>
@@ -166,26 +151,15 @@ function Admin() {
                     {/* Card Solicitações */}
                     <div 
                         className="admin-card" 
-                        onClick={() => {
-                            const el = document.getElementById("secao-solicitacoes");
-                            if (el) el.scrollIntoView({ behavior: "smooth" });
-                        }}
+                        onClick={() => setAbaAtiva("solicitacoes")}
                         style={{ 
                             background: "#fff", 
                             padding: "15px", 
                             borderRadius: "8px", 
-                            boxShadow: "0 2px 5px rgba(0,0,0,0.1)", 
+                            boxShadow: abaAtiva === "solicitacoes" ? "0 0 0 2px #2d6a4f" : "0 2px 5px rgba(0,0,0,0.1)", 
                             textAlign: "center",
                             cursor: "pointer",
-                            transition: "transform 0.2s, box-shadow 0.2s"
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = "translateY(-3px)";
-                            e.currentTarget.style.boxShadow = "0 4px 10px rgba(0,0,0,0.15)";
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = "translateY(0)";
-                            e.currentTarget.style.boxShadow = "0 2px 5px rgba(0,0,0,0.1)";
+                            transition: "all 0.2s"
                         }}
                     >
                         <span style={{ fontSize: "2rem" }}>📋</span>
@@ -194,98 +168,142 @@ function Admin() {
                     </div>
                 </div>
 
-                <h2 id="secao-solicitacoes">Solicitações de adoção</h2>
+                {/* CONTEÚDO DINÂMICO CONFORME A ABA SELECIONADA */}
+                <div className="conteudo-aba">
+                    {abaAtiva === "animais" && <AdminAnimais />}
+                    
+                    {abaAtiva === "usuarios" && <AdminUsuarios />}
 
-                {solicitacoes.length === 0 ? (
-                    <p>Nenhuma solicitação encontrada.</p>
-                ) : (
-                    <div 
-                        className="solicitacoes-admin"
-                        style={{ 
-                            display: "grid", 
-                            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", 
-                            gap: "20px", 
-                            marginTop: "15px" 
-                        }}
-                    >
-                        {solicitacoes.map((solicitacao) => {
-                            if (!solicitacao) return null;
+                    {abaAtiva === "solicitacoes" && (
+                        <div>
+                            <h2>Solicitações de adoção</h2>
 
-                            const nomeAnimal = typeof solicitacao.animal === "object" ? solicitacao.animal?.nome : solicitacao.animal;
-                            const nomeAdotante = typeof solicitacao.adotante === "object" ? solicitacao.adotante?.nome : solicitacao.adotante;
-                            const emailAdotante = typeof solicitacao.adotante === "object" ? solicitacao.adotante?.email : null;
-                            const status = (solicitacao.status || "pendente").toLowerCase();
-
-                            return (
-                                <div
-                                    className="solicitacao-admin-card"
-                                    key={solicitacao._id || Math.random()}
-                                    style={{
-                                        background: "#ffffff",
-                                        border: "1px solid #e0e0e0",
-                                        borderRadius: "10px",
-                                        padding: "18px",
-                                        boxShadow: "0 3px 8px rgba(0,0,0,0.08)",
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        justifyContent: "space-between"
+                            {solicitacoes.length === 0 ? (
+                                <p>Nenhuma solicitação encontrada.</p>
+                            ) : (
+                                <div 
+                                    className="solicitacoes-admin"
+                                    style={{ 
+                                        display: "grid", 
+                                        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", 
+                                        gap: "20px", 
+                                        marginTop: "15px" 
                                     }}
                                 >
-                                    <div>
-                                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-                                            <h3 style={{ margin: 0, fontSize: "1.1rem" }}>
-                                                🐾 {nomeAnimal || "Animal"}
-                                            </h3>
-                                            <span 
-                                                className={`status-${status}`}
+                                    {solicitacoes.map((solicitacao) => {
+                                        if (!solicitacao) return null;
+
+                                        // Mapeamento dinâmico para garantir que os dados do Adotante sejam extraídos
+                                        const adotanteObj = solicitacao.adotante || solicitacao.usuario || {};
+
+                                        const nomeAnimal = typeof solicitacao.animal === "object" ? solicitacao.animal?.nome : solicitacao.animal;
+                                        
+                                        const nomeAdotante = 
+                                            (typeof solicitacao.adotante === "string" ? solicitacao.adotante : null) || 
+                                            adotanteObj.nome || 
+                                            solicitacao.nomeAdotante || 
+                                            solicitacao.nome;
+
+                                        const emailAdotante = 
+                                            adotanteObj.email || 
+                                            solicitacao.emailAdotante || 
+                                            solicitacao.email;
+
+                                        const telefoneAdotante = 
+                                            adotanteObj.telefone || 
+                                            adotanteObj.celular || 
+                                            solicitacao.telefoneAdotante || 
+                                            solicitacao.telefone || 
+                                            solicitacao.contato;
+
+                                        const enderecoAdotante = 
+                                            adotanteObj.endereco || 
+                                            solicitacao.enderecoAdotante || 
+                                            solicitacao.endereco;
+
+                                        const status = (solicitacao.status || "pendente").toLowerCase();
+
+                                        return (
+                                            <div
+                                                className="solicitacao-admin-card"
+                                                key={solicitacao._id || Math.random()}
                                                 style={{
-                                                    padding: "4px 10px",
-                                                    borderRadius: "12px",
-                                                    fontSize: "0.8rem",
-                                                    fontWeight: "bold",
-                                                    backgroundColor: status === "pendente" ? "#fff3cd" : status === "aprovada" ? "#d4edda" : "#f8d7da",
-                                                    color: status === "pendente" ? "#856404" : status === "aprovada" ? "#155724" : "#721c24"
+                                                    background: "#ffffff",
+                                                    border: "1px solid #e0e0e0",
+                                                    borderRadius: "10px",
+                                                    padding: "18px",
+                                                    boxShadow: "0 3px 8px rgba(0,0,0,0.08)",
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    justifyContent: "space-between"
                                                 }}
                                             >
-                                                {solicitacao.status || "Pendente"}
-                                            </span>
-                                        </div>
+                                                <div>
+                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+                                                        <h3 style={{ margin: 0, fontSize: "1.1rem" }}>
+                                                            🐾 {nomeAnimal || "Animal"}
+                                                        </h3>
+                                                        <span 
+                                                            className={`status-${status}`}
+                                                            style={{
+                                                                padding: "4px 10px",
+                                                                borderRadius: "12px",
+                                                                fontSize: "0.8rem",
+                                                                fontWeight: "bold",
+                                                                backgroundColor: status === "pendente" ? "#fff3cd" : status === "aprovada" ? "#d4edda" : "#f8d7da",
+                                                                color: status === "pendente" ? "#856404" : status === "aprovada" ? "#155724" : "#721c24"
+                                                            }}
+                                                        >
+                                                            {solicitacao.status || "Pendente"}
+                                                        </span>
+                                                    </div>
 
-                                        <p style={{ margin: "6px 0" }}>
-                                            <strong>Adotante:</strong> {nomeAdotante || "Não informado"}
-                                        </p>
+                                                    <p style={{ margin: "6px 0" }}>
+                                                        <strong>Adotante:</strong> {nomeAdotante || "Não informado"}
+                                                    </p>
 
-                                        <p style={{ margin: "6px 0" }}>
-                                            <strong>Email:</strong> {emailAdotante || "Não informado"}
-                                        </p>
+                                                    <p style={{ margin: "6px 0" }}>
+                                                        <strong>Email:</strong> {emailAdotante || "Não informado"}
+                                                    </p>
 
-                                        <p style={{ margin: "6px 0" }}>
-                                            <strong>Mensagem:</strong> {solicitacao.mensagem || "Sem mensagem"}
-                                        </p>
-                                    </div>
+                                                    <p style={{ margin: "6px 0" }}>
+                                                        <strong>Telefone:</strong> {telefoneAdotante || "Não informado"}
+                                                    </p>
 
-                                    {status === "pendente" && (
-                                        <div className="acoes-solicitacao" style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
-                                            <button
-                                                style={{ flex: 1, cursor: "pointer" }}
-                                                onClick={() => atualizarStatus(solicitacao._id, "aprovada")}
-                                            >
-                                                ✅ Aprovar
-                                            </button>
+                                                    <p style={{ margin: "6px 0" }}>
+                                                        <strong>Endereço:</strong> {enderecoAdotante || "Não informado"}
+                                                    </p>
 
-                                            <button
-                                                style={{ flex: 1, cursor: "pointer" }}
-                                                onClick={() => atualizarStatus(solicitacao._id, "recusada")}
-                                            >
-                                                ❌ Recusar
-                                            </button>
-                                        </div>
-                                    )}
+                                                    <p style={{ margin: "6px 0" }}>
+                                                        <strong>Mensagem:</strong> {solicitacao.mensagem || "Sem mensagem"}
+                                                    </p>
+                                                </div>
+
+                                                {status === "pendente" && (
+                                                    <div className="acoes-solicitacao" style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
+                                                        <button
+                                                            style={{ flex: 1, cursor: "pointer" }}
+                                                            onClick={() => atualizarStatus(solicitacao._id, "aprovada")}
+                                                        >
+                                                            ✅ Aprovar
+                                                        </button>
+
+                                                        <button
+                                                            style={{ flex: 1, cursor: "pointer" }}
+                                                            onClick={() => atualizarStatus(solicitacao._id, "recusada")}
+                                                        >
+                                                            ❌ Recusar
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
-                            );
-                        })}
-                    </div>
-                )}
+                            )}
+                        </div>
+                    )}
+                </div>
             </main>
         </>
     );
