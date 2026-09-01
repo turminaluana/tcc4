@@ -41,7 +41,7 @@ function AdminAnimais() {
     return (
         <section className="secao-admin-animais">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                <h2>Gerenciar animais 🐾</h2>
+                <h2>Gerenciar animais </h2>
 
                 <button 
                     type="button" 
@@ -109,7 +109,13 @@ function AdminAnimais() {
                                         ) : null}
                                         
                                         {/* Ícone exibido se não houver foto ou se a URL falhar */}
-                                        <span style={{ fontSize: "50px", display: temFoto ? "none" : "block" }}>🐾</span>
+                                        <span style={{ fontSize: "50px", display: temFoto ? "none" : "block" }}>
+                                            <img 
+                                                src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                                                alt="Pata" 
+                                                style={{ width: "50px", height: "50px" }} 
+                                                />
+                                        </span>
                                     </div>
 
                                     {/* Textos Informativos */}
@@ -121,7 +127,7 @@ function AdminAnimais() {
                                         <p style={{ margin: "2px 0" }}><strong>Sexo:</strong> {animal.sexo}</p>
                                         <p style={{ margin: "2px 0" }}>
                                             <strong>Disponível:</strong>{" "}
-                                            {animal.disponivel ? "Sim ✅" : "Não ❌"}
+                                            {animal.disponivel ? "Sim " : "Não "}
                                         </p>
                                     </div>
                                 </div>
@@ -133,7 +139,7 @@ function AdminAnimais() {
                                         onClick={() => navigate(`/admin/animais/editar/${animal._id}`)}
                                         style={{ padding: "8px 14px", cursor: "pointer" }}
                                     >
-                                        ✏️ Editar
+                                        Editar
                                     </button>
 
                                     <button 
@@ -141,7 +147,7 @@ function AdminAnimais() {
                                         onClick={() => excluirAnimal(animal._id)}
                                         style={{ padding: "8px 14px", cursor: "pointer" }}
                                     >
-                                        🗑️ Excluir
+                                        Excluir
                                     </button>
                                 </div>
                             </div>

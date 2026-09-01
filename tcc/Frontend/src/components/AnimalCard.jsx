@@ -36,7 +36,13 @@ function AnimalCard({ animal }) {
         {animal.imagem ? (
           <img src={animal.imagem} alt={animal.nome} />
         ) : (
-          <span>🐾</span>
+          <span>
+            <img 
+              src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+              alt="Patinha" 
+              style={{ width: "50px", height: "50px" }} 
+              />
+          </span>
         )}
       </div>
 
@@ -68,13 +74,13 @@ function AnimalCard({ animal }) {
           <>
             {jaSolicitou ? (
               <button className="btn-solicitado" disabled>
-                Solicitação enviada 🐾
+                Solicitação enviada 
               </button>
             ) : (
               <button
                 onClick={() => navigate(`/solicitar-adocao/${animal._id}`)}
               >
-                Quero Adotar 🐾
+                Quero Adotar 
               </button>
             )}
           </>

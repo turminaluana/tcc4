@@ -83,7 +83,14 @@ function Admin() {
             <>
                 <Navbar />
                 <main className="admin" style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-                    <h1>Painel Administrativo 👑</h1>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                        <h1>Painel Administrativo</h1>
+                        <img 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyGkUaMW-5B0E3OTByG6EjNlkigxNKtpK9VopjGWa7_w&s=10" 
+                            alt="Coroa Admin" 
+                            style={{ width: "32px", height: "32px" }} 
+                        />
+                    </div>
                     <p>Carregando dados...</p>
                 </main>
             </>
@@ -95,7 +102,14 @@ function Admin() {
             <Navbar />
 
             <main className="admin" style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}>
-                <h1>Painel Administrativo 👑</h1>
+                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <h1>Painel Administrativo</h1>
+                    <img 
+                        src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyGkUaMW-5B0E3OTByG6EjNlkigxNKtpK9VopjGWa7_w&s=10" 
+                        alt="Coroa Admin" 
+                        style={{ width: "32px", height: "32px" }} 
+                    />
+                </div>
                 <p>Gerencie o sistema AdotaPet.</p>
 
                 {erro && <p className="erro-msg" style={{ color: "red" }}>{erro}</p>}
@@ -124,7 +138,11 @@ function Admin() {
                             transition: "all 0.2s"
                         }}
                     >
-                        <span style={{ fontSize: "2rem" }}>🐾</span>
+                        <img 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKINx0FVncHQy5Tv9AQfX8kOnFiZ8MgX1DS0PqPSN_IA&s=10" 
+                            alt="Ícone Animais" 
+                            style={{ width: "40px", height: "40px", marginBottom: "8px" }} 
+                        />
                         <h3>Animais</h3>
                         <strong>{animais.length}</strong>
                     </div>
@@ -143,7 +161,11 @@ function Admin() {
                             transition: "all 0.2s"
                         }}
                     >
-                        <span style={{ fontSize: "2rem" }}>👥</span>
+                        <img 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQto5lBwrmFQzfz9m_ZMQag3JFP7C4yKk-veVUC4eqfow&s=10" 
+                            alt="Ícone Usuários" 
+                            style={{ width: "40px", height: "40px", marginBottom: "8px" }} 
+                        />
                         <h3>Usuários</h3>
                         <strong>{usuarios.length}</strong>
                     </div>
@@ -162,7 +184,11 @@ function Admin() {
                             transition: "all 0.2s"
                         }}
                     >
-                        <span style={{ fontSize: "2rem" }}>📋</span>
+                        <img 
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSUr4EzvlsmnPYU6MY7xPAHL2dcytqsmVT-8OtbAt_IeQ&s=10" 
+                            alt="Ícone Solicitações" 
+                            style={{ width: "40px", height: "40px", marginBottom: "8px" }} 
+                        />
                         <h3>Solicitações</h3>
                         <strong>{solicitacoes.length}</strong>
                     </div>
@@ -193,7 +219,6 @@ function Admin() {
                                     {solicitacoes.map((solicitacao) => {
                                         if (!solicitacao) return null;
 
-                                        // Mapeamento dinâmico para garantir que os dados do Adotante sejam extraídos
                                         const adotanteObj = solicitacao.adotante || solicitacao.usuario || {};
 
                                         const nomeAnimal = typeof solicitacao.animal === "object" ? solicitacao.animal?.nome : solicitacao.animal;
@@ -240,8 +265,13 @@ function Admin() {
                                             >
                                                 <div>
                                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-                                                        <h3 style={{ margin: 0, fontSize: "1.1rem" }}>
-                                                            🐾 {nomeAnimal || "Animal"}
+                                                        <h3 style={{ margin: 0, fontSize: "1.1rem", display: "flex", alignItems: "center", gap: "8px" }}>
+                                                            <img 
+                                                                src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                                                                alt="Pata" 
+                                                                style={{ width: "20px", height: "20px" }} 
+                                                            />
+                                                            {nomeAnimal || "Animal"}
                                                         </h3>
                                                         <span 
                                                             className={`status-${status}`}
@@ -282,17 +312,50 @@ function Admin() {
                                                 {status === "pendente" && (
                                                     <div className="acoes-solicitacao" style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
                                                         <button
-                                                            style={{ flex: 1, cursor: "pointer" }}
+                                                            style={{ 
+                                                                flex: 1, 
+                                                                cursor: "pointer", 
+                                                                display: "flex", 
+                                                                alignItems: "center", 
+                                                                justifyContent: "center", 
+                                                                gap: "6px",
+                                                                padding: "8px",
+                                                                borderRadius: "6px",
+                                                                border: "1px solid #28a745",
+                                                                backgroundColor: "#28a745",
+                                                                color: "#fff",
+                                                                fontWeight: "bold"
+                                                            }}
                                                             onClick={() => atualizarStatus(solicitacao._id, "aprovada")}
                                                         >
-                                                            ✅ Aprovar
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                                <polyline points="20 6 9 17 4 12"></polyline>
+                                                            </svg>
+                                                            Aprovar
                                                         </button>
 
                                                         <button
-                                                            style={{ flex: 1, cursor: "pointer" }}
+                                                            style={{ 
+                                                                flex: 1, 
+                                                                cursor: "pointer", 
+                                                                display: "flex", 
+                                                                alignItems: "center", 
+                                                                justifyContent: "center", 
+                                                                gap: "6px",
+                                                                padding: "8px",
+                                                                borderRadius: "6px",
+                                                                border: "1px solid #dc3545",
+                                                                backgroundColor: "#dc3545",
+                                                                color: "#fff",
+                                                                fontWeight: "bold"
+                                                            }}
                                                             onClick={() => atualizarStatus(solicitacao._id, "recusada")}
                                                         >
-                                                            ❌ Recusar
+                                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                            </svg>
+                                                            Recusar
                                                         </button>
                                                     </div>
                                                 )}

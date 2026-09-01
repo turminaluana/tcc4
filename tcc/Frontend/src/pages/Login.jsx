@@ -23,10 +23,6 @@ function Login() {
     setMensagem("");
 
 
-    // ================================
-    // ADMINISTRADOR PRÉ-DEFINIDO
-    // ================================
-
     if (
       email.toLowerCase().trim() === "admin@gmail.com" &&
       senha === "123456"
@@ -51,7 +47,7 @@ function Login() {
 
 
       setMensagem(
-        "Login realizado com sucesso! ✅"
+        "Login realizado com sucesso! "
       );
 
 
@@ -65,11 +61,6 @@ function Login() {
 
       return;
     }
-
-
-    // ================================
-    // LOGIN NORMAL
-    // ================================
 
     try {
 
@@ -92,7 +83,7 @@ function Login() {
 
 
       setMensagem(
-        "Login realizado com sucesso! ✅"
+        "Login realizado com sucesso! "
       );
 
 
@@ -146,7 +137,11 @@ function Login() {
       <div className="auth-card">
 
         <h1>
-          AdotaPet 🐾
+          AdotaPet <img 
+                            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                            alt="Patinha" 
+                            style={{ width: "20px", height: "20px" }} 
+                        />
         </h1>
 
         <h2>
@@ -195,7 +190,7 @@ function Login() {
 
 
           <button type="submit">
-            Entrar 🐾
+            Entrar 
           </button>
 
         </form>

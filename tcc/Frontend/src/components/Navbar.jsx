@@ -14,14 +14,19 @@ function Navbar() {
 
     return (
         <nav className="navbar">
-            <Link to="/animais" className="logo">
-                AdotaPet 🐾
+            <Link to="/animais" className="logo" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                AdotaPet
+                <img 
+                    src="https://img.magnific.com/vetores-gratis/impressao-paw-brown-desenhada-a-mao_78370-6281.jpg?semt=ais_hybrid&w=740&q=80" 
+                    alt="Patinha" 
+                    style={{ width: "24px", height: "24px" }} 
+                />
             </Link>
 
             <div className="navbar-direita">
                 {usuario && (
                     <span>
-                        Olá, {usuario.nome}! 👋
+                        Olá, {usuario.nome}!
                     </span>
                 )}
 

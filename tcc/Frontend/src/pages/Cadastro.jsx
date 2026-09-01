@@ -44,7 +44,7 @@ function Cadastro() {
 
 
       setMensagem(
-        "Cadastro realizado com sucesso! ✅"
+        "Cadastro realizado com sucesso! "
       );
 
 
@@ -87,7 +87,11 @@ function Cadastro() {
       <div className="auth-card">
 
         <h1>
-          AdotaPet 🐾
+          AdotaPet <img 
+                            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                            alt="Patinha" 
+                            style={{ width: "20px", height: "20px" }} 
+                        />
         </h1>
 
         <h2>
@@ -213,7 +217,7 @@ function Cadastro() {
 
 
           <button type="submit">
-            Criar minha conta 🐾
+            Criar minha conta 
           </button>
 
 

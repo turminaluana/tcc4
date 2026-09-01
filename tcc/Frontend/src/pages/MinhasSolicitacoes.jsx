@@ -64,9 +64,9 @@ function MinhasSolicitacoes() {
   }
 
   function textoStatus(status) {
-    if (status === "aprovada") return "Aprovada ✅";
-    if (status === "recusada") return "Recusada ❌";
-    return "Pendente ⏳";
+    if (status === "aprovada") return "Aprovada ";
+    if (status === "recusada") return "Recusada ";
+    return "Pendente ";
   }
 
   return (
@@ -76,7 +76,11 @@ function MinhasSolicitacoes() {
       <main className="solicitacoes-page">
         <div className="solicitacoes-header">
           <div>
-            <h1>Minhas solicitações 🐾</h1>
+            <h1>Minhas solicitações <img src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                alt="Patinha" 
+                style={{ width: "20px", height: "20px" }} 
+              /></h1>
+                    
             <p>Acompanhe o andamento dos seus pedidos de adoção.</p>
           </div>
 
@@ -85,7 +89,13 @@ function MinhasSolicitacoes() {
 
         {carregando && (
           <div className="solicitacoes-vazia">
-            <span>🐾</span>
+            <span>
+              <img 
+                src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                alt="Patinha" 
+                style={{ width: "20px", height: "20px" }} 
+                />
+            </span>
             <p>Carregando suas solicitações...</p>
           </div>
         )}
@@ -94,12 +104,16 @@ function MinhasSolicitacoes() {
 
         {!carregando && !erro && solicitacoes.length === 0 && (
           <div className="solicitacoes-vazia">
-            <span>🐶</span>
+            <span></span>
             <h2>Você ainda não fez nenhuma solicitação.</h2>
             <p>Encontre um novo amigo e faça uma solicitação de adoção!</p>
 
             <button onClick={() => navigate("/animais")}>
-              Encontrar um pet 🐾
+              Encontrar um pet <img 
+                            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                            alt="Patinha" 
+                            style={{ width: "20px", height: "20px" }} 
+                        />
             </button>
           </div>
         )}
@@ -116,7 +130,13 @@ function MinhasSolicitacoes() {
                         alt={solicitacao.animal.nome}
                       />
                     ) : (
-                      <span>🐾</span>
+                      <span>
+                        <img 
+                            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                            alt="Patinha" 
+                            style={{ width: "20px", height: "20px" }} 
+                        />
+                      </span>
                     )}
                   </div>
 

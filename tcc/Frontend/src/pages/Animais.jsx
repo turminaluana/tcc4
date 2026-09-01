@@ -57,8 +57,13 @@ function Animais() {
 
             <main className="app">
 
-                <h1 className="titulo">
-                    AdotaPet 🐾
+                <h1 className="titulo" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+                    AdotaPet 
+                    <img 
+                        src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                        alt="Patinha" 
+                        style={{ width: "32px", height: "32px" }} 
+                    />
                 </h1>
 
                 <p className="subtitulo">
@@ -71,8 +76,13 @@ function Animais() {
                 </h2>
 
                 {carregando && (
-                    <p>
-                        Carregando animais... 🐾
+                    <p style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        Carregando animais... 
+                        <img 
+                            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                            alt="Patinha" 
+                            style={{ width: "20px", height: "20px" }} 
+                        />
                     </p>
                 )}
 

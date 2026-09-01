@@ -68,7 +68,7 @@ function AdminUsuarios() {
     return (
         <section className="secao-admin-usuarios">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                <h2>Gerenciar Usuários 👥</h2>
+                <h2>Gerenciar Usuários </h2>
             </div>
 
             {carregando && <p>Carregando usuários...</p>}
@@ -104,7 +104,7 @@ function AdminUsuarios() {
                                     </h3>
                                     <p style={{ margin: "3px 0" }}><strong>E-mail:</strong> {user.email}</p>
                                     <p style={{ margin: "3px 0" }}><strong>Telefone/WhatsApp:</strong> {user.telefone || user.celular || "Não informado"}</p>
-                                    <p style={{ margin: "3px 0" }}><strong>Tipo:</strong> {user.isAdmin || user.tipo === "admin" ? "Administrador 🔑" : "Usuário Comum 👤"}</p>
+                                    <p style={{ margin: "3px 0" }}><strong>Tipo:</strong> {user.isAdmin || user.tipo === "admin" ? "Administrador " : "Usuário Comum "}</p>
                                 </div>
 
                                 {/* Opções/Ações */}
@@ -122,7 +122,7 @@ function AdminUsuarios() {
                                             fontWeight: "bold"
                                         }}
                                     >
-                                        📋 Ver Solicitações
+                                        Ver Solicitações
                                     </button>
 
                                     <button
@@ -138,7 +138,7 @@ function AdminUsuarios() {
                                             fontWeight: "bold"
                                         }}
                                     >
-                                        🗑️ Excluir
+                                        Excluir
                                     </button>
                                 </div>
                             </div>

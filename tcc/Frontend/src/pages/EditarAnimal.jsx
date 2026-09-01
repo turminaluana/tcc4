@@ -100,7 +100,7 @@ function EditarAnimal() {
             await api.put(`/animais/${id}`, payload);
             alert("Animal atualizado com sucesso!");
             
-            // 🟢 Redireciona de volta para o Painel Principal do Admin
+            //Redireciona de volta para o Painel Principal do Admin
             navigate("/admin");
         } catch (error) {
             console.error("ERRO AO ATUALIZAR ANIMAL:", error.response || error);
@@ -119,7 +119,7 @@ function EditarAnimal() {
             <>
                 <Navbar />
                 <p style={{ padding: "40px", textAlign: "center", fontSize: "18px" }}>
-                    Carregando dados do animal... 🐾
+                    Carregando dados do animal... 
                 </p>
             </>
         );
@@ -139,7 +139,7 @@ function EditarAnimal() {
                 </button>
 
                 <div className="card-formulario">
-                    <h1 className="titulo-form">✏️ Editar Animal</h1>
+                    <h1 className="titulo-form"> Editar Animal</h1>
 
                     {erro && <div className="mensagem-erro">{erro}</div>}
 

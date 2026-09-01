@@ -41,7 +41,7 @@ function SolicitarAdocao() {
             );
 
             setMensagemSistema(
-                "Solicitação enviada com sucesso! 🐾"
+                "Solicitação enviada com sucesso!"
             );
 
             setTimeout(() => {
@@ -76,8 +76,12 @@ function SolicitarAdocao() {
 
                 <div className="solicitar-card">
 
-                    <div className="solicitar-icon">
-                        🐾
+                    <div className="solicitar-icon" style={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
+                        <img 
+                            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                            alt="Patinha" 
+                            style={{ width: "45px", height: "45px" }} 
+                        />
                     </div>
 
                     <h1>
@@ -86,7 +90,7 @@ function SolicitarAdocao() {
 
                     <p className="solicitar-subtitulo">
                         Que legal que você quer dar um novo
-                        lar para este animal! ❤️
+                        lar para este animal!
                     </p>
 
 
@@ -107,14 +111,14 @@ function SolicitarAdocao() {
                     )}
 
 
-                    <form onSubmit={enviarSolicitacao}>
+                    <form onSubmit={enviarSolicitacao} style={{ display: "flex", flexDirection: "column", width: "100%" }}>
 
-                        <label>
-                            Por que você gostaria de
-                            adotar este animal?
+                        <label htmlFor="mensagem-adocao" style={{ textAlign: "left", marginBottom: "8px", fontWeight: "bold" }}>
+                            Por que você gostaria de adotar este animal?
                         </label>
 
                         <textarea
+                            id="mensagem-adocao"
                             value={mensagem}
                             onChange={(e) =>
                                 setMensagem(
@@ -122,22 +126,35 @@ function SolicitarAdocao() {
                                 )
                             }
                             placeholder="Conte um pouco sobre você e sobre o lar que pretende oferecer..."
-                            rows="7"
+                            rows="5"
                             required
+                            style={{
+                                width: "100%",
+                                boxSizing: "border-box",
+                                padding: "12px",
+                                borderRadius: "8px",
+                                border: "1px solid #ccc",
+                                fontSize: "1rem",
+                                fontFamily: "inherit",
+                                resize: "vertical"
+                            }}
                         />
 
 
-                        <p className="dica-solicitacao">
-                            💡 Conte um pouco sobre o espaço
-                            disponível, sua rotina e como
-                            pretende cuidar do seu novo amigo.
+                        <p className="dica-solicitacao" style={{ textAlign: "left", fontSize: "0.85rem", color: "#666", marginTop: "8px" }}>
+                            Conte um pouco sobre o espaço disponível, sua rotina e como pretende cuidar do seu novo amigo.
                         </p>
 
 
                         {mensagemSistema && (
 
-                            <p className="mensagem-sucesso">
+                            <p className="mensagem-sucesso" style={{ display: "flex", alignItems: "center", gap: "6px" }}>
                                 {mensagemSistema}
+                                <img 
+                                    src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                                    alt="Patinha" 
+                                    style={{ width: "18px", height: "18px" }} 
+                                />
                             </p>
 
                         )}
@@ -152,7 +169,7 @@ function SolicitarAdocao() {
                         )}
 
 
-                        <div className="solicitar-acoes">
+                        <div className="solicitar-acoes" style={{ display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
 
                             <button
                                 type="button"
@@ -168,10 +185,15 @@ function SolicitarAdocao() {
                             <button
                                 type="submit"
                                 disabled={carregando}
+                                style={{ display: "inline-flex", alignItems: "center", gap: "8px" }}
                             >
-                                {carregando
-                                    ? "Enviando..."
-                                    : "Enviar solicitação 🐾"}
+                                {carregando ? (
+                                    "Enviando..."
+                                ) : (
+                                    <>
+                                        Enviar solicitação
+                                    </>
+                                )}
                             </button>
 
                         </div>

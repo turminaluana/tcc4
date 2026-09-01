@@ -98,7 +98,7 @@ function MinhaConta() {
 
       setMensagem({
         tipo: "sucesso",
-        texto: "Perfil e dados atualizados com sucesso! 🎉",
+        texto: "Perfil e dados atualizados com sucesso! ",
       });
     } catch (error) {
       console.error("Erro ao atualizar perfil:", error);
@@ -120,7 +120,7 @@ function MinhaConta() {
       <main className="perfil-container">
         <div className="perfil-card">
           <div className="perfil-header">
-            <h1>Minha Conta 👤</h1>
+            <h1>Minha Conta</h1>
             <p>Gerencie e mantenha seus dados cadastrais e segurança atualizados.</p>
           </div>
 
@@ -217,7 +217,7 @@ function MinhaConta() {
                 className="btn-salvar"
                 disabled={carregando}
               >
-                {carregando ? "Salvando..." : "Salvar Alterações 💾"}
+                {carregando ? "Salvando..." : "Salvar Alterações "}
               </button>
             </div>
           </form>
