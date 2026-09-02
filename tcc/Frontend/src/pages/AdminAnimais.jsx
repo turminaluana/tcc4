@@ -41,7 +41,7 @@ function AdminAnimais() {
     return (
         <section className="secao-admin-animais">
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" }}>
-                <h2>Gerenciar animais </h2>
+                <h2>Gerenciar Animais </h2>
 
                 <button 
                     type="button" 

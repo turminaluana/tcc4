@@ -13,6 +13,15 @@ function Animais() {
     const [carregando, setCarregando] = useState(true);
     const [mensagem, setMensagem] = useState("");
 
+    // Estado para armazenar os critérios do filtro da Navbar
+    const [filtros, setFiltros] = useState({
+        busca: "",
+        especie: "",
+        raca: "",
+        sexo: "",
+        idade: ""
+    });
+
     useEffect(() => {
 
         async function buscarAnimais() {
@@ -46,14 +55,37 @@ function Animais() {
 
     }, []);
 
-    const animaisDisponiveis =
-        animais.filter(
-            (animal) => animal.disponivel
-        );
+    // Aplica os filtros sobre os animais que estão disponíveis
+    const animaisDisponiveis = animais.filter((animal) => {
+        if (!animal.disponivel) return false;
+
+        const atendeBusca = animal.nome
+            ?.toLowerCase()
+            .includes((filtros.busca || "").toLowerCase());
+
+        const atendeEspecie = filtros.especie
+            ? animal.especie?.toLowerCase() === filtros.especie.toLowerCase()
+            : true;
+
+        const atendeRaca = filtros.raca
+            ? animal.raca?.toLowerCase().includes(filtros.raca.toLowerCase())
+            : true;
+
+        const atendeSexo = filtros.sexo
+            ? animal.sexo?.toLowerCase() === filtros.sexo.toLowerCase()
+            : true;
+
+        const atendeIdade = filtros.idade
+            ? animal.idade?.toString().toLowerCase().includes(filtros.idade.toLowerCase())
+            : true;
+
+        return atendeBusca && atendeEspecie && atendeRaca && atendeSexo && atendeIdade;
+    });
 
     return (
         <>
-            <Navbar />
+            {/* Passamos o estado e o setter para a Navbar interagir */}
+            <Navbar filtros={filtros} setFiltros={setFiltros} />
 
             <main className="app">
 
@@ -76,7 +108,7 @@ function Animais() {
                 </h2>
 
                 {carregando && (
-                    <p style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <p style={{ display: "flex", alignItems: "center", gap: "8px", justifyContent: "center" }}>
                         Carregando animais... 
                         <img 
                             src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
@@ -96,7 +128,7 @@ function Animais() {
                     !mensagem &&
                     animaisDisponiveis.length === 0 && (
                         <p>
-                            Nenhum animal disponível no momento.
+                            Nenhum animal encontrado com os filtros selecionados.
                         </p>
                     )}
 

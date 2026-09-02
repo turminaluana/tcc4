@@ -183,7 +183,7 @@ function MinhaConta() {
             </div>
 
             <div className="secao-senha">
-              <h3>Alterar Senha 🔑</h3>
+              <h3>Alterar Senha </h3>
               <br />
 
               <div className="form-group">
