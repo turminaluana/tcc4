@@ -139,7 +139,13 @@ function EditarAnimal() {
                 </button>
 
                 <div className="card-formulario">
-                    <h1 className="titulo-form"> Editar Animal</h1>
+                    <h1 className="titulo-form"> 
+                        <img 
+                            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
+                            alt="Patinha" 
+                            style={{ width: "20px", height: "20px" }} 
+                        />
+                        Editar Animal</h1>
 
                     {erro && <div className="mensagem-erro">{erro}</div>}
 

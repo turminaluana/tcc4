@@ -2,9 +2,7 @@ import Solicitacao from "../models/Solicitacao.js";
 import Animal from "../models/Animal.js";
 import Usuario from "../models/Usuario.js";
 
-/* =====================================
-   CRIAR SOLICITAÇÃO
-===================================== */
+/* CRIAR SOLICITAÇÃO */
 export async function criarSolicitacao(req, res) {
   try {
     const { usuario, animal, mensagem } = req.body;
@@ -76,9 +74,7 @@ export async function criarSolicitacao(req, res) {
   }
 }
 
-/* =====================================
-   LISTAR SOLICITAÇÕES
-===================================== */
+/* LISTAR SOLICITAÇÕES */
 export async function listarSolicitacoes(req, res) {
   try {
     // Adicionado "endereco" ao populate do usuário
@@ -97,9 +93,7 @@ export async function listarSolicitacoes(req, res) {
   }
 }
 
-/* =====================================
-   ATUALIZAR SOLICITAÇÃO
-===================================== */
+/*ATUALIZAR SOLICITAÇÃO*/
 export async function atualizarSolicitacao(req, res) {
   try {
     const { id } = req.params;
@@ -137,9 +131,8 @@ export async function atualizarSolicitacao(req, res) {
   }
 }
 
-/* =====================================
-   REMOVER SOLICITAÇÃO
-===================================== */
+/*REMOVER SOLICITAÇÃO*/
+
 export async function removerSolicitacao(req, res) {
   try {
     const { id } = req.params;
@@ -161,9 +154,7 @@ export async function removerSolicitacao(req, res) {
   }
 }
 
-/* =====================================
-   CANCELAR SOLICITAÇÃO (USUÁRIO)
-===================================== */
+/* CANCELAR SOLICITAÇÃO (USUÁRIO) */
 export async function cancelarSolicitacao(req, res) {
   try {
     const { id } = req.params;
