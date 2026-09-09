@@ -7,40 +7,34 @@ export async function criarSolicitacao(req, res) {
   try {
     const { usuario, animal, mensagem } = req.body;
 
-    // Verifica usuário
     if (!usuario) {
       return res.status(400).json({ mensagem: "Usuário é obrigatório." });
     }
 
-    // Verifica animal
     if (!animal) {
       return res.status(400).json({ mensagem: "Animal é obrigatório." });
     }
 
-    // Procura usuário no MongoDB
     const usuarioEncontrado = await Usuario.findById(usuario);
     if (!usuarioEncontrado) {
       return res.status(404).json({ mensagem: "Usuário não encontrado." });
     }
 
-    // Procura animal no MongoDB
     const animalEncontrado = await Animal.findById(animal);
     if (!animalEncontrado) {
       return res.status(404).json({ mensagem: "Animal não encontrado." });
     }
 
-    // Verifica disponibilidade
     if (!animalEncontrado.disponivel) {
       return res.status(400).json({
         mensagem: "Este animal não está mais disponível para adoção."
       });
     }
 
-    // Verifica se o usuário já possui uma solicitação ATIVA (não cancelada) para esse animal
     const solicitacaoExistente = await Solicitacao.findOne({
       usuario,
       animal,
-      status: { $ne: "cancelada" } // Permite reenviar se a anterior foi cancelada
+      status: { $ne: "cancelada" }
     });
 
     if (solicitacaoExistente) {
@@ -49,14 +43,12 @@ export async function criarSolicitacao(req, res) {
       });
     }
 
-    // Cria solicitação
     const solicitacao = await Solicitacao.create({
       usuario,
       animal,
       mensagem: mensagem || ""
     });
 
-    // Busca os dados completos (Adicionado "endereco" aqui)
     const solicitacaoCompleta = await Solicitacao.findById(solicitacao._id)
       .populate("usuario", "nome email telefone endereco")
       .populate("animal", "nome especie raca idade sexo imagem");
@@ -74,11 +66,13 @@ export async function criarSolicitacao(req, res) {
   }
 }
 
-/* LISTAR SOLICITAÇÕES */
+/* LISTAR SOLICITAÇÕES (COM FILTRO POR USUÁRIO) */
 export async function listarSolicitacoes(req, res) {
   try {
-    // Adicionado "endereco" ao populate do usuário
-    const solicitacoes = await Solicitacao.find()
+    const { usuario } = req.query;
+    const filtro = usuario ? { usuario } : {};
+
+    const solicitacoes = await Solicitacao.find(filtro)
       .populate("usuario", "nome email cpf telefone endereco")
       .populate("animal", "nome especie raca idade sexo imagem")
       .sort({ createdAt: -1 });
@@ -93,7 +87,7 @@ export async function listarSolicitacoes(req, res) {
   }
 }
 
-/*ATUALIZAR SOLICITAÇÃO*/
+/* ATUALIZAR SOLICITAÇÃO (GARANTINDO O EXPORT) */
 export async function atualizarSolicitacao(req, res) {
   try {
     const { id } = req.params;
@@ -113,7 +107,6 @@ export async function atualizarSolicitacao(req, res) {
       return res.status(404).json({ mensagem: "Solicitação não encontrada." });
     }
 
-    // Se aprovada, animal deixa de estar disponível
     if (status === "aprovada") {
       await Animal.findByIdAndUpdate(solicitacao.animal, { disponivel: false });
     }
@@ -131,8 +124,7 @@ export async function atualizarSolicitacao(req, res) {
   }
 }
 
-/*REMOVER SOLICITAÇÃO*/
-
+/* REMOVER SOLICITAÇÃO */
 export async function removerSolicitacao(req, res) {
   try {
     const { id } = req.params;
@@ -154,7 +146,7 @@ export async function removerSolicitacao(req, res) {
   }
 }
 
-/* CANCELAR SOLICITAÇÃO (USUÁRIO) */
+/* CANCELAR SOLICITAÇÃO */
 export async function cancelarSolicitacao(req, res) {
   try {
     const { id } = req.params;

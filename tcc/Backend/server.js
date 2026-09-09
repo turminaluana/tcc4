@@ -39,7 +39,7 @@ app.use("/api/solicitacoes", solicitacaoRoutes);
 
 app.get("/", (req, res) => {
     res.json({
-        mensagem: "API de Adoção de Animais funcionando! 🐾"
+        mensagem: "API de Adoção de Animais funcionando!"
     });
 });
 

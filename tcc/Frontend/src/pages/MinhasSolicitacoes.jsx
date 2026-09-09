@@ -16,7 +16,14 @@ function MinhasSolicitacoes() {
   useEffect(() => {
     async function carregarSolicitacoes() {
       try {
-        const resposta = await api.get("/solicitacoes");
+        // Pega o ID do usuário (pode estar como .id ou ._id)
+        const idUsuario = usuario?.id || usuario?._id;
+
+        if (!idUsuario) return;
+
+        // Envia o ID do usuário via query parameter
+        const resposta = await api.get(`/solicitacoes?usuario=${idUsuario}`);
+
         // Oculta solicitações com status "cancelada"
         const ativas = resposta.data.filter(
           (sol) => sol.status !== "cancelada"
@@ -76,11 +83,15 @@ function MinhasSolicitacoes() {
       <main className="solicitacoes-page">
         <div className="solicitacoes-header">
           <div>
-            <h1>Minhas solicitações <img src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
-                alt="Patinha" 
-                style={{ width: "20px", height: "20px" }} 
-              /></h1>
-                    
+            <h1>
+              Minhas solicitações{" "}
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png"
+                alt="Patinha"
+                style={{ width: "20px", height: "20px" }}
+              />
+            </h1>
+
             <p>Acompanhe o andamento dos seus pedidos de adoção.</p>
           </div>
 
@@ -90,11 +101,11 @@ function MinhasSolicitacoes() {
         {carregando && (
           <div className="solicitacoes-vazia">
             <span>
-              <img 
-                src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
-                alt="Patinha" 
-                style={{ width: "20px", height: "20px" }} 
-                />
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png"
+                alt="Patinha"
+                style={{ width: "20px", height: "20px" }}
+              />
             </span>
             <p>Carregando suas solicitações...</p>
           </div>
@@ -106,14 +117,15 @@ function MinhasSolicitacoes() {
           <div className="solicitacoes-vazia">
             <span></span>
             <h2>Você ainda não fez nenhuma solicitação.</h2>
-            <p>Encontre um novo amigo e faça uma solicitação de adoção!</p>
+            
 
             <button onClick={() => navigate("/animais")}>
-              Encontrar um pet <img 
-                            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
-                            alt="Patinha" 
-                            style={{ width: "20px", height: "20px" }} 
-                        />
+              Encontrar um pet{" "}
+              <img
+                src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png"
+                alt="Patinha"
+                style={{ width: "20px", height: "20px" }}
+              />
             </button>
           </div>
         )}
@@ -131,10 +143,10 @@ function MinhasSolicitacoes() {
                       />
                     ) : (
                       <span>
-                        <img 
-                            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
-                            alt="Patinha" 
-                            style={{ width: "20px", height: "20px" }} 
+                        <img
+                          src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png"
+                          alt="Patinha"
+                          style={{ width: "20px", height: "20px" }}
                         />
                       </span>
                     )}

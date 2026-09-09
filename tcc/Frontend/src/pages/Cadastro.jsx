@@ -3,7 +3,6 @@ import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
 
 function Cadastro() {
-
   const navigate = useNavigate();
 
   const [nome, setNome] = useState("");
@@ -15,217 +14,135 @@ function Cadastro() {
 
   const [mensagem, setMensagem] = useState("");
 
-
   async function cadastrar(e) {
-
     e.preventDefault();
-
     setMensagem("");
 
     try {
+      const resposta = await axios.post("http://localhost:3000/api/usuarios", {
+        nome,
+        cpf,
+        email,
+        telefone,
+        endereco,
+        senha
+      });
 
-      const resposta = await axios.post(
-        "http://localhost:3000/api/usuarios",
-        {
-          nome,
-          cpf,
-          email,
-          telefone,
-          endereco,
-          senha
-        }
-      );
-
-
-      console.log(
-        "CADASTRO:",
-        resposta.data
-      );
-
-
-      setMensagem(
-        "Cadastro realizado com sucesso! "
-      );
-
+      console.log("CADASTRO REALIZADO COM SUCESSO:", resposta.data);
+      setMensagem("Cadastro realizado com sucesso!");
 
       setTimeout(() => {
-
         navigate("/login");
-
       }, 1500);
 
-
     } catch (erro) {
-
-      console.error(
-        "ERRO AO CADASTRAR:",
-        erro
-      );
-
+      console.error("ERRO DETALHADO DO BACKEND:", erro.response?.data || erro.message);
 
       if (erro.response) {
+        const dadosErro = erro.response.data;
 
-        setMensagem(
-          erro.response.data.mensagem ||
-          "Erro ao realizar cadastro."
-        );
-
+        if (typeof dadosErro === "string") {
+          setMensagem(dadosErro);
+        } else if (dadosErro.mensagem) {
+          setMensagem(dadosErro.mensagem);
+        } else if (dadosErro.error) {
+          setMensagem(dadosErro.error);
+        } else if (Array.isArray(dadosErro.errors)) {
+          setMensagem(dadosErro.errors.map(err => err.message || err.msg).join(" | "));
+        } else {
+          setMensagem("Dados inválidos. Verifique as informações preenchidas.");
+        }
       } else {
-
-        setMensagem(
-          "Não foi possível conectar ao servidor."
-        );
+        setMensagem("Não foi possível conectar ao servidor.");
       }
     }
   }
 
-
   return (
-
     <div className="auth-container">
-
       <div className="auth-card">
-
         <h1>
-          AdotaPet <img 
-                            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
-                            alt="Patinha" 
-                            style={{ width: "20px", height: "20px" }} 
-                        />
+          AdotaPet{" "}
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png"
+            alt="Patinha"
+            style={{ width: "20px", height: "20px" }}
+          />
         </h1>
 
-        <h2>
-          Criar conta
-        </h2>
-
+        <h2>Criar conta</h2>
 
         <form onSubmit={cadastrar}>
-
-
           <div>
-
-            <label>
-              Nome
-            </label>
-
+            <label>Nome</label>
             <input
               type="text"
               value={nome}
-              onChange={(e) =>
-                setNome(e.target.value)
-              }
+              onChange={(e) => setNome(e.target.value)}
               placeholder="Digite seu nome"
               required
             />
-
           </div>
 
-
           <div>
-
-            <label>
-              CPF
-            </label>
-
+            <label>CPF</label>
             <input
               type="text"
               value={cpf}
-              onChange={(e) =>
-                setCpf(e.target.value)
-              }
+              onChange={(e) => setCpf(e.target.value)}
               placeholder="Digite seu CPF"
               required
             />
-
           </div>
 
-
           <div>
-
-            <label>
-              E-mail
-            </label>
-
+            <label>E-mail</label>
             <input
               type="email"
               value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="Digite seu e-mail"
               required
             />
-
           </div>
 
-
           <div>
-
-            <label>
-              Telefone
-            </label>
-
+            <label>Telefone</label>
             <input
               type="text"
               value={telefone}
-              onChange={(e) =>
-                setTelefone(e.target.value)
-              }
+              onChange={(e) => setTelefone(e.target.value)}
               placeholder="Digite seu telefone"
               required
             />
-
           </div>
 
-
           <div>
-
-            <label>
-              Endereço
-            </label>
-
+            <label>Endereço</label>
             <input
               type="text"
               value={endereco}
-              onChange={(e) =>
-                setEndereco(e.target.value)
-              }
+              onChange={(e) => setEndereco(e.target.value)}
               placeholder="Digite seu endereço"
               required
             />
-
           </div>
 
-
           <div>
-
-            <label>
-              Senha
-            </label>
-
+            <label>Senha</label>
             <input
               type="password"
               value={senha}
-              onChange={(e) =>
-                setSenha(e.target.value)
-              }
+              onChange={(e) => setSenha(e.target.value)}
               placeholder="Digite sua senha"
               required
             />
-
           </div>
 
-
-          <button type="submit">
-            Criar minha conta 
-          </button>
-
-
+          <button type="submit">Criar minha conta</button>
         </form>
 
-
         {mensagem && (
-
           <p
             className={
               mensagem.includes("sucesso")
@@ -236,25 +153,13 @@ function Cadastro() {
           >
             {mensagem}
           </p>
-
         )}
 
-
         <p className="auth-link">
-
-          Já possui uma conta?{" "}
-
-          <Link to="/login">
-            Entrar
-          </Link>
-
+          Já possui uma conta? <Link to="/login">Entrar</Link>
         </p>
-
-
       </div>
-
     </div>
-
   );
 }
 

@@ -10,15 +10,26 @@ function AnimalCard({ animal }) {
 
   useEffect(() => {
     async function checarSolicitacao() {
-      // Se não houver usuário ou se for admin, não precisa checar solicitações
-      if (!usuario || usuario.tipo === "admin") return;
+      // Pega o ID do usuário (trata se o campo for id ou _id)
+      const idUsuario = usuario?.id || usuario?._id;
+
+      // Se não houver usuário logado ou se for admin, não precisa checar
+      if (!usuario || !idUsuario || usuario.tipo === "admin") return;
 
       try {
-        const resposta = await api.get("/solicitacoes");
-        // Verifica se há solicitação para este animal que não esteja cancelada
+        // Envia o ID do usuário na query string
+        const resposta = await api.get(`/solicitacoes?usuario=${idUsuario}`);
+
+        // Verifica se O USUÁRIO LOGADO solicitou ESTE animal e a solicitação não está cancelada
         const solicitou = resposta.data.some((sol) => {
           const idAnimalSolicitacao = sol.animal?._id || sol.animal;
-          return idAnimalSolicitacao === animal._id && sol.status !== "cancelada";
+          const idUsuarioSolicitacao = sol.usuario?._id || sol.usuario;
+
+          return (
+            idAnimalSolicitacao === animal._id &&
+            String(idUsuarioSolicitacao) === String(idUsuario) &&
+            sol.status !== "cancelada"
+          );
         });
 
         setJaSolicitou(solicitou);
@@ -41,7 +52,7 @@ function AnimalCard({ animal }) {
               src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png" 
               alt="Patinha" 
               style={{ width: "50px", height: "50px" }} 
-              />
+            />
           </span>
         )}
       </div>
@@ -69,7 +80,7 @@ function AnimalCard({ animal }) {
           <p className="descricao">{animal.descricao}</p>
         )}
 
-        {/* Oculta completamente as opções de adoção para o administrador */}
+        {/* Oculta opções de adoção para o administrador */}
         {usuario?.tipo !== "admin" && (
           <>
             {jaSolicitou ? (
