@@ -102,6 +102,7 @@ function Cadastro() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="Digite seu e-mail"
+              autoComplete="off"
               required
             />
           </div>
@@ -135,6 +136,7 @@ function Cadastro() {
               value={senha}
               onChange={(e) => setSenha(e.target.value)}
               placeholder="Digite sua senha"
+              autoComplete="new-password"
               required
             />
           </div>
