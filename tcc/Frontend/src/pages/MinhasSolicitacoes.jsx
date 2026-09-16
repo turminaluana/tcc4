@@ -16,15 +16,13 @@ function MinhasSolicitacoes() {
   useEffect(() => {
     async function carregarSolicitacoes() {
       try {
-        // Pega o ID do usuário (pode estar como .id ou ._id)
         const idUsuario = usuario?.id || usuario?._id;
 
         if (!idUsuario) return;
 
-        // Envia o ID do usuário via query parameter
-        const resposta = await api.get(`/solicitacoes?usuario=${idUsuario}`);
+        // Requisição para a rota específica /minhas passando o ID do usuário
+        const resposta = await api.get(`/solicitacoes/minhas?usuarioId=${idUsuario}`);
 
-        // Oculta solicitações com status "cancelada"
         const ativas = resposta.data.filter(
           (sol) => sol.status !== "cancelada"
         );
@@ -45,7 +43,6 @@ function MinhasSolicitacoes() {
     }
   }, [usuario]);
 
-  // Função para chamar a API e cancelar
   async function handleCancelarSolicitacao(id) {
     const confirmou = window.confirm(
       "Tem certeza que deseja cancelar esta solicitação?"
@@ -55,7 +52,6 @@ function MinhasSolicitacoes() {
     try {
       await api.patch(`/solicitacoes/${id}/cancelar`);
 
-      // Remove imediatamente a solicitação cancelada da lista na tela
       setSolicitacoes((prev) => prev.filter((sol) => sol._id !== id));
     } catch (error) {
       alert(
@@ -117,16 +113,7 @@ function MinhasSolicitacoes() {
           <div className="solicitacoes-vazia">
             <span></span>
             <h2>Você ainda não fez nenhuma solicitação.</h2>
-            
 
-            <button onClick={() => navigate("/animais")}>
-              Encontrar um pet{" "}
-              <img
-                src="https://cdn-icons-png.flaticon.com/512/8168/8168871.png"
-                alt="Patinha"
-                style={{ width: "20px", height: "20px" }}
-              />
-            </button>
           </div>
         )}
 

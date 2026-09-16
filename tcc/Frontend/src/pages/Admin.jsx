@@ -114,7 +114,7 @@ function Admin() {
 
                 {erro && <p className="erro-msg" style={{ color: "red" }}>{erro}</p>}
 
-                {/* CARDS FIXOS DO TOPO (ALTERAM A ABA ATIVA) */}
+                {/* CARDS FIXOS DO TOPO */}
                 <div 
                     className="admin-cards" 
                     style={{ 
@@ -194,7 +194,7 @@ function Admin() {
                     </div>
                 </div>
 
-                {/* CONTEÚDO DINÂMICO CONFORME A ABA SELECIONADA */}
+                {/* CONTEÚDO DINÂMICO */}
                 <div className="conteudo-aba">
                     {abaAtiva === "animais" && <AdminAnimais />}
                     
@@ -223,6 +223,9 @@ function Admin() {
 
                                         const nomeAnimal = typeof solicitacao.animal === "object" ? solicitacao.animal?.nome : solicitacao.animal;
                                         
+                                        // Verifica se o animal já está indisponível/adotado
+                                        const animalJaAdotado = typeof solicitacao.animal === "object" && solicitacao.animal?.disponivel === false;
+
                                         const nomeAdotante = 
                                             (typeof solicitacao.adotante === "string" ? solicitacao.adotante : null) || 
                                             adotanteObj.nome || 
@@ -288,6 +291,22 @@ function Admin() {
                                                         </span>
                                                     </div>
 
+                                                    {/* ALERTA DE ANIMAL JÁ ADOTADO */}
+                                                    {animalJaAdotado && status !== "aprovada" && (
+                                                        <div style={{
+                                                            backgroundColor: "#ffebee",
+                                                            color: "#c62828",
+                                                            padding: "8px 12px",
+                                                            borderRadius: "6px",
+                                                            marginBottom: "12px",
+                                                            fontSize: "0.85rem",
+                                                            fontWeight: "bold",
+                                                            border: "1px solid #ef9a9a"
+                                                        }}>
+                                                            ⚠️ Este animal já foi adotado por outra pessoa.
+                                                        </div>
+                                                    )}
+
                                                     <p style={{ margin: "6px 0" }}>
                                                         <strong>Adotante:</strong> {nomeAdotante || "Não informado"}
                                                     </p>
@@ -312,19 +331,21 @@ function Admin() {
                                                 {status === "pendente" && (
                                                     <div className="acoes-solicitacao" style={{ display: "flex", gap: "10px", marginTop: "15px" }}>
                                                         <button
+                                                            disabled={animalJaAdotado}
                                                             style={{ 
                                                                 flex: 1, 
-                                                                cursor: "pointer", 
+                                                                cursor: animalJaAdotado ? "not-allowed" : "pointer", 
                                                                 display: "flex", 
                                                                 alignItems: "center", 
                                                                 justifyContent: "center", 
                                                                 gap: "6px",
                                                                 padding: "8px",
                                                                 borderRadius: "6px",
-                                                                border: "1px solid #28a745",
-                                                                backgroundColor: "#28a745",
+                                                                border: animalJaAdotado ? "1px solid #ccc" : "1px solid #28a745",
+                                                                backgroundColor: animalJaAdotado ? "#ccc" : "#28a745",
                                                                 color: "#fff",
-                                                                fontWeight: "bold"
+                                                                fontWeight: "bold",
+                                                                opacity: animalJaAdotado ? 0.7 : 1
                                                             }}
                                                             onClick={() => atualizarStatus(solicitacao._id, "aprovada")}
                                                         >

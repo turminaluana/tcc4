@@ -34,9 +34,14 @@ export async function cadastrarAnimal(req, res) {
 /* LISTAR ANIMAIS COM FILTRO */
 export async function listarAnimais(req, res) {
   try {
-    const { nome, especie, raca, sexo, idade } = req.query;
+    const { nome, especie, raca, sexo, idade, admin } = req.query;
 
-    let filtro = { disponivel: true };
+    let filtro = {};
+
+    // Se NÃO for requisição do Admin (ou seja, a vitrine pública de adotantes), exibe APENAS disponíveis
+    if (admin !== "true") {
+      filtro.disponivel = true;
+    }
 
     if (nome && nome.trim() !== "") {
       filtro.nome = new RegExp(nome.trim(), "i");
@@ -58,7 +63,10 @@ export async function listarAnimais(req, res) {
       filtro.idade = Number(idade);
     }
 
-    const animais = await Animal.find(filtro).sort({ createdAt: -1 });
+    // Busca os animais e traz os dados do usuário que adotou (adotadoPor)
+    const animais = await Animal.find(filtro)
+      .populate("adotadoPor", "nome email cpf telefone")
+      .sort({ createdAt: -1 });
 
     return res.status(200).json(animais);
   } catch (error) {
@@ -67,15 +75,42 @@ export async function listarAnimais(req, res) {
   }
 }
 
-/* ATUALIZAR ANIMAL (EXPORTADO EXPLICITAMENTE) */
-export async function atualizarAnimal(req, res) {
+/* BUSCAR ANIMAL POR ID (ADICIONADO PARA CORRIGIR TELA DE EDIÇÃO) */
+export async function buscarAnimalPorId(req, res) {
   try {
     const { id } = req.params;
 
-    const animal = await Animal.findByIdAndUpdate(id, req.body, {
+    // Busca o animal diretamente pelo ID sem filtrar por disponivel: true
+    const animal = await Animal.findById(id).populate("adotadoPor", "nome email cpf telefone");
+
+    if (!animal) {
+      return res.status(404).json({ mensagem: "Animal não encontrado na base de dados." });
+    }
+
+    return res.status(200).json(animal);
+  } catch (error) {
+    console.error("ERRO AO BUSCAR ANIMAL POR ID:", error);
+    return res.status(500).json({ mensagem: "Erro ao buscar animal." });
+  }
+}
+
+/* ATUALIZAR ANIMAL */
+export async function atualizarAnimal(req, res) {
+  try {
+    const { id } = req.params;
+    const dadosAtualizacao = { ...req.body };
+
+    // Se o admin reativar o animal como disponível manualmente,
+    // garantimos que os dados de adoção anterior sejam limpos
+    if (dadosAtualizacao.disponivel === true) {
+      dadosAtualizacao.adotadoPor = null;
+      dadosAtualizacao.dataAdocao = null;
+    }
+
+    const animal = await Animal.findByIdAndUpdate(id, dadosAtualizacao, {
       new: true,
       runValidators: true
-    });
+    }).populate("adotadoPor", "nome email cpf telefone");
 
     if (!animal) {
       return res.status(404).json({ mensagem: "Animal não encontrado." });

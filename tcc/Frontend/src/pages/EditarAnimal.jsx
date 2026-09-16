@@ -20,12 +20,14 @@ function EditarAnimal() {
     const [salvando, setSalvando] = useState(false);
     const [erro, setErro] = useState("");
 
-    // Busca todos os animais e localiza o animal pelo ID da URL
     useEffect(() => {
         async function carregarAnimal() {
             try {
                 setCarregando(true);
-                const resposta = await api.get("/animais");
+                setErro("");
+
+                // Passa ?admin=true para garantir que encontre mesmo desativado/indisponível
+                const resposta = await api.get(`/animais?admin=true`);
                 const lista = Array.isArray(resposta.data) ? resposta.data : resposta.data.animais || [];
                 
                 // Encontra o animal pelo ID correto (_id ou id)
@@ -76,7 +78,6 @@ function EditarAnimal() {
         const sexoFormatado = sexo.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const especieFormatada = especie.toLowerCase();
 
-        // Mapeia a imagem em múltiplos formatos para o Backend aceitar
         const urlImagem = foto.trim();
 
         const payload = {
@@ -100,7 +101,7 @@ function EditarAnimal() {
             await api.put(`/animais/${id}`, payload);
             alert("Animal atualizado com sucesso!");
             
-            //Redireciona de volta para o Painel Principal do Admin
+            // Redireciona de volta para o Painel Principal do Admin
             navigate("/admin");
         } catch (error) {
             console.error("ERRO AO ATUALIZAR ANIMAL:", error.response || error);

@@ -46,6 +46,18 @@ const animalSchema = new mongoose.Schema(
         disponivel: {
             type: Boolean,
             default: true
+        },
+
+        // --- NOVOS CAMPOS ADICIONADOS ---
+        adotadoPor: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Usuario",
+            default: null
+        },
+
+        dataAdocao: {
+            type: Date,
+            default: null
         }
     },
     {

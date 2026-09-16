@@ -66,28 +66,44 @@ export async function criarSolicitacao(req, res) {
   }
 }
 
-/* LISTAR SOLICITAÇÕES (COM FILTRO POR USUÁRIO) */
+/* LISTAR TODAS AS SOLICITAÇÕES (ADMIN) */
 export async function listarSolicitacoes(req, res) {
   try {
-    const { usuario } = req.query;
-    const filtro = usuario ? { usuario } : {};
-
-    const solicitacoes = await Solicitacao.find(filtro)
+    const solicitacoes = await Solicitacao.find()
       .populate("usuario", "nome email cpf telefone endereco")
-      .populate("animal", "nome especie raca idade sexo imagem")
+      .populate("animal", "nome especie raca idade sexo imagem disponivel")
       .sort({ createdAt: -1 });
 
     return res.status(200).json(solicitacoes);
   } catch (error) {
     console.error("ERRO AO LISTAR SOLICITAÇÕES:", error);
-    return res.status(500).json({
-      mensagem: "Erro ao listar solicitações.",
-      erro: error.message
-    });
+    return res.status(500).json({ mensagem: "Erro ao buscar solicitações." });
   }
 }
 
-/* ATUALIZAR SOLICITAÇÃO (GARANTINDO O EXPORT) */
+/* LISTAR SOLICITAÇÕES APENAS DO USUÁRIO LOGADO */
+export async function listarMinhasSolicitacoes(req, res) {
+  try {
+    // Tenta obter o ID pelo token autenticado (req.usuarioId) ou via query/params se enviado
+    const usuarioId = req.usuarioId || req.usuario?._id || req.query.usuarioId;
+
+    if (!usuarioId) {
+      return res.status(400).json({ mensagem: "ID do usuário não foi fornecido." });
+    }
+
+    const solicitacoes = await Solicitacao.find({ usuario: usuarioId })
+      .populate("usuario", "nome email cpf telefone endereco")
+      .populate("animal", "nome especie raca idade sexo imagem disponivel")
+      .sort({ createdAt: -1 });
+
+    return res.status(200).json(solicitacoes);
+  } catch (error) {
+    console.error("ERRO AO LISTAR MINHAS SOLICITAÇÕES:", error);
+    return res.status(500).json({ mensagem: "Erro ao buscar suas solicitações." });
+  }
+}
+
+/* ATUALIZAR SOLICITAÇÃO */
 export async function atualizarSolicitacao(req, res) {
   try {
     const { id } = req.params;
@@ -97,7 +113,7 @@ export async function atualizarSolicitacao(req, res) {
       return res.status(400).json({ mensagem: "O status é obrigatório." });
     }
 
-    const solicitacao = await Solicitacao.findByIdAndUpdate(
+    let solicitacao = await Solicitacao.findByIdAndUpdate(
       id,
       { status },
       { returnDocument: "after", runValidators: true }
@@ -108,8 +124,16 @@ export async function atualizarSolicitacao(req, res) {
     }
 
     if (status === "aprovada") {
-      await Animal.findByIdAndUpdate(solicitacao.animal, { disponivel: false });
+      await Animal.findByIdAndUpdate(solicitacao.animal, { 
+        disponivel: false,
+        adotadoPor: solicitacao.usuario,
+        dataAdocao: new Date()
+      });
     }
+
+    solicitacao = await Solicitacao.findById(solicitacao._id)
+      .populate("usuario", "nome email cpf telefone endereco")
+      .populate("animal", "nome especie raca idade sexo imagem");
 
     return res.status(200).json({
       mensagem: "Solicitação atualizada com sucesso!",
